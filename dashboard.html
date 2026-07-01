@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Deliverable C — FMCG Plastic Packaging Interactive Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0f4f2;--surface:#fff;--surface2:#f5f8f6;
+  --text:#1a2b22;--muted:#6b7f74;--border:#d4ddd8;--border-s:#b8ccc2;
+  --green:#0f6e56;--gl:#e1f5ee;--gm:#1D9E75;
+  --red:#993c1d;--rl:#faece7;--rm:#D85A30;
+  --amber:#854f0b;--am:#eda100;
+  --blue:#185fa5;--bm:#2a78d6;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;}
+.page{max-width:1140px;margin:0 auto;padding:1.25rem 1rem;}
+
+/* Top bar */
+.topbar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.4rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.topbar h1{font-size:19px;font-weight:700;}
+.topbar p{font-size:12px;color:var(--muted);margin-top:2px;}
+.topbar-meta{font-size:11px;color:var(--muted);text-align:right;}
+.topbar-meta b{display:block;font-size:13px;font-weight:600;color:var(--text);}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1rem;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:default;}
+.kpi-label{font-size:10px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;}
+.kpi-val{font-size:22px;font-weight:700;line-height:1.1;}
+.kpi-sub{font-size:10px;margin-top:3px;}
+.kpi.g .kpi-val{color:var(--green);} .kpi.g .kpi-sub{color:var(--green);}
+.kpi.r .kpi-val{color:var(--red);} .kpi.r .kpi-sub{color:var(--red);}
+.kpi.b .kpi-val{color:var(--blue);} .kpi.b .kpi-sub{color:var(--blue);}
+.kpi.n .kpi-val{color:var(--text);}
+
+/* Layout grid */
+.grid-top{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.panel-full{margin-bottom:1rem;}
+
+/* Panel base */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;display:flex;flex-direction:column;gap:10px;}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.panel-title{font-size:14px;font-weight:700;color:var(--text);}
+.panel-desc{font-size:11px;color:var(--muted);line-height:1.6;margin-top:2px;}
+
+/* Controls */
+.ctrl-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.btn{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .14s;font-family:inherit;white-space:nowrap;}
+.btn:hover{border-color:var(--gm);color:var(--green);}
+.btn.active{background:var(--gm);border-color:var(--gm);color:#fff;}
+.btn.active-red{background:var(--rm);border-color:var(--rm);color:#fff;}
+.btn.sm{font-size:10px;padding:3px 8px;}
+.btn.icon{padding:4px 8px;}
+select{font-size:12px;padding:5px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-family:inherit;outline:none;max-width:200px;}
+select:focus{border-color:var(--gm);}
+
+/* Sort group */
+.sort-group{display:flex;border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+.sort-group .btn{border:none;border-radius:0;padding:4px 9px;}
+.sort-group .btn.active{background:var(--surface2);}
+
+/* Chart wrap */
+.chart-wrap{position:relative;width:100%;}
+
+/* Progress bars (animated) */
+.prog-list{display:flex;flex-direction:column;gap:9px;}
+.prog-row{display:flex;flex-direction:column;gap:3px;}
+.prog-header{display:flex;justify-content:space-between;align-items:center;}
+.prog-name{font-size:11px;color:var(--muted);}
+.prog-val{font-size:11px;font-weight:700;}
+.track{background:var(--surface2);border-radius:4px;height:7px;overflow:hidden;border:1px solid var(--border);}
+.bar-fill{height:100%;border-radius:4px;width:0;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.prog-note{font-size:10px;color:var(--muted);}
+
+/* Scorecard stat cards */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .15s;}
+.stat-card:hover,.stat-card.highlight{border-color:var(--gm);}
+.stat-key{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.stat-num{font-size:18px;font-weight:700;margin:2px 0;}
+.stat-diff{font-size:10px;}
+
+/* View toggle */
+.view-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.view-btn{font-size:11px;padding:4px 10px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .14s;}
+.view-btn.active{background:var(--surface2);color:var(--text);font-weight:600;}
+
+/* Compare toggle */
+.compare-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.compare-label{font-size:11px;color:var(--muted);}
+
+/* Callout */
+.callout{background:var(--gl);border:1px solid #9fe1cb;border-radius:8px;padding:9px 12px;font-size:11px;color:var(--green);line-height:1.6;}
+.callout b{font-weight:700;}
+.callout-warn{background:var(--rl);border-color:#f5c4b3;color:var(--red);}
+.callout-amber{background:#faeeda;border-color:#fac775;color:var(--amber);}
+
+/* Donut legend */
+.donut-legend{display:flex;gap:12px;flex-wrap:wrap;}
+.dl-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);}
+.dl-swatch{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+
+/* Tooltip highlight overlay */
+.selected-bar-label{position:absolute;background:var(--text);color:#fff;font-size:10px;padding:3px 7px;border-radius:4px;pointer-events:none;white-space:nowrap;transform:translateX(-50%);opacity:0;transition:opacity .2s;}
+
+/* Animate on load */
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.panel{animation:fadein .35s ease both;}
+.kpi{animation:fadein .3s ease both;}
+
+/* Responsive */
+@media(max-width:700px){
+  .grid-top{grid-template-columns:1fr;}
+  .kpis{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div>
+    <h1>FMCG Plastic Packaging Dashboard</h1>
+    <p>Global Commitment signatory performance · Ellen MacArthur Foundation · 2018–2024</p>
+  </div>
+  <div class="topbar-meta"><b>16 companies · 9,388kt tracked</b>Source: EMF Global Commitment Reports 2019 &amp; 2025</div>
+</div>
+
+<!-- KPI STRIP -->
+<div class="kpis">
+  <div class="kpi n"><div class="kpi-label">Total tracked volume</div><div class="kpi-val" id="kpi1">9,388kt</div><div class="kpi-sub" style="color:var(--muted)">2024 metric tonnes</div></div>
+  <div class="kpi g"><div class="kpi-label">Signatory virgin plastic Δ</div><div class="kpi-val">−6%</div><div class="kpi-sub">vs global market +13%</div></div>
+  <div class="kpi b"><div class="kpi-label">PCR content (2024 avg)</div><div class="kpi-val">16%</div><div class="kpi-sub">up from 5% in 2018 (3×)</div></div>
+  <div class="kpi r"><div class="kpi-label">Reusable packaging (2024)</div><div class="kpi-val">1.2%</div><div class="kpi-sub">target: 100% by 2025</div></div>
+</div>
+
+<!-- PANEL 1: Volume Explorer — FULL WIDTH -->
+<div class="panel-full">
+<div class="panel">
+  <div class="panel-head">
+    <div>
+      <p class="panel-title">Panel 1 · Company volume explorer</p>
+      <p class="panel-desc">Total plastic packaging weight by company, 2024. Filter by sector · sort by volume or name · click any bar to load that company in the scorecard.</p>
+    </div>
+    <div class="sort-group">
+      <button class="btn active" id="sort-vol" onclick="setSort('vol',this)">Volume ↓</button>
+      <button class="btn" id="sort-az" onclick="setSort('az',this)">A–Z</button>
+    </div>
+  </div>
+  <div class="ctrl-row" id="sector-filters">
+    <button class="btn active" data-sector="all" onclick="filterSector(this)">All sectors</button>
+    <button class="btn" data-sector="Beverages" onclick="filterSector(this)">Beverages</button>
+    <button class="btn" data-sector="Food" onclick="filterSector(this)">Food</button>
+    <button class="btn" data-sector="HPC" onclick="filterSector(this)">Household &amp; Personal Care</button>
+    <button class="btn" data-sector="Food & Bev." onclick="filterSector(this)">Food &amp; Bev.</button>
+    <button class="btn" data-sector="Cosmetics" onclick="filterSector(this)">Cosmetics</button>
+  </div>
+  <div class="chart-wrap" style="height:320px;"><canvas id="vol-chart" role="img" aria-label="Horizontal bar chart of company plastic packaging volume">Company plastic packaging volumes 2024</canvas></div>
+  <div id="vol-callout" class="callout" style="display:none;"></div>
+</div>
+</div>
+
+<!-- PANELS 2 + 3 side by side -->
+<div class="grid-top">
+
+  <!-- PANEL 2: Industry Trends -->
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <p class="panel-title">Panel 2 · Industry progress tracker</p>
+        <p class="panel-desc">Toggle metrics on/off · use ▶ to animate the trend building over time.</p>
+      </div>
+    </div>
+    <!-- Metric toggles -->
+    <div class="ctrl-row">
+      <button class="btn active" id="tog-pcr" onclick="toggleMetric('pcr',this)" style="border-color:#1D9E75;color:#0f6e56;">● PCR content</button>
+      <button class="btn active" id="tog-mkt" onclick="toggleMetric('mkt',this)" style="border-color:#D85A30;color:#993c1d;">● Market virgin Δ</button>
+      <button class="btn active" id="tog-sig" onclick="toggleMetric('sig',this)" style="border-color:#2a78d6;color:#185fa5;">● Signatory virgin Δ</button>
+    </div>
+    <!-- Animate -->
+    <div class="ctrl-row">
+      <button class="btn sm" onclick="animateTrend()">▶ Animate trend</button>
+      <button class="btn sm" onclick="resetTrend()">↺ Reset</button>
+    </div>
+    <div class="chart-wrap" style="height:200px;"><canvas id="trend-chart" role="img" aria-label="Multi-line chart showing PCR content, market and signatory virgin plastic trends">Industry trends 2018-2024</canvas></div>
+    <!-- Animated progress bars -->
+    <div class="prog-list">
+      <div class="prog-row">
+        <div class="prog-header"><span class="prog-name">RRC packaging design</span><span class="prog-val" style="color:var(--green);">72% / 100%</span></div>
+        <div class="track"><div class="bar-fill" id="bar-rrc" style="background:#1D9E75;"></div></div>
+        <span class="prog-note">+10pp vs 2018 · 28pp gap to 2025 target</span>
+      </div>
+      <div class="prog-row">
+        <div class="prog-header"><span class="prog-name">Packaging eliminated (cumulative since 2019)</span><span class="prog-val" style="color:var(--blue);">775k tonnes</span></div>
+        <div class="track"><div class="bar-fill" id="bar-elim" style="background:#2a78d6;"></div></div>
+        <span class="prog-note">180,000 tonnes eliminated in 2024 alone</span>
+      </div>
+      <div class="prog-row">
+        <div class="prog-header"><span class="prog-name">Reusable packaging (2024)</span><span class="prog-val" style="color:var(--red);">1.2% / 100%</span></div>
+        <div class="track"><div class="bar-fill" id="bar-reuse" style="background:#D85A30;min-width:3px;"></div></div>
+        <span class="prog-note">Critical laggard — systemic change barely begun</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: Scorecard -->
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <p class="panel-title">Panel 3 · Company scorecard</p>
+        <p class="panel-desc">Select a company · enable Compare mode to overlay two companies · switch between bar and radar views · click a metric card to highlight it.</p>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" onclick="setViewMode('bar',this)">Bar</button>
+        <button class="view-btn" onclick="setViewMode('radar',this)">Radar</button>
+      </div>
+    </div>
+    <!-- Company selects -->
+    <div class="compare-row">
+      <span class="compare-label">Company A:</span>
+      <select id="co-a" onchange="renderScorecard()">
+        <option value="coca-cola">Coca-Cola</option>
+        <option value="pepsico">PepsiCo</option>
+        <option value="nestle">Nestlé</option>
+        <option value="unilever">Unilever</option>
+        <option value="mars">Mars</option>
+        <option value="loreal">L'Oréal</option>
+        <option value="sc-johnson">SC Johnson</option>
+        <option value="danone">Danone</option>
+        <option value="colgate">Colgate-Palmolive</option>
+      </select>
+      <button class="btn sm" id="compare-toggle" onclick="toggleCompare()">+ Compare</button>
+    </div>
+    <div id="compare-b-row" style="display:none;" class="compare-row">
+      <span class="compare-label">Company B:</span>
+      <select id="co-b" onchange="renderScorecard()">
+        <option value="nestle">Nestlé</option>
+        <option value="pepsico">PepsiCo</option>
+        <option value="coca-cola">Coca-Cola</option>
+        <option value="unilever">Unilever</option>
+        <option value="mars">Mars</option>
+        <option value="loreal">L'Oréal</option>
+        <option value="sc-johnson">SC Johnson</option>
+        <option value="danone">Danone</option>
+        <option value="colgate">Colgate-Palmolive</option>
+      </select>
+    </div>
+    <!-- Stat cards (single mode) -->
+    <div class="stat-grid" id="stat-cards"></div>
+    <!-- Chart -->
+    <div class="chart-wrap" style="height:200px;"><canvas id="scorecard-chart" role="img" aria-label="Company scorecard chart">Company scorecard</canvas></div>
+    <!-- Callout -->
+    <div id="sc-callout" class="callout"></div>
+  </div>
+
+</div><!-- end grid-top -->
+
+</div><!-- end page -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ============================================================
+   DATA
+============================================================ */
+const ALL_COMPANIES = [
+  {name:'Coca-Cola',kt:3606,sector:'Beverages'},
+  {name:'PepsiCo',kt:2095,sector:'Food & Bev.'},
+  {name:'Nestlé',kt:873,sector:'Food'},
+  {name:'Danone',kt:670,sector:'Food'},
+  {name:'Unilever',kt:655,sector:'HPC'},
+  {name:'Henkel',kt:269,sector:'HPC'},
+  {name:'Colgate-P.',kt:246,sector:'HPC'},
+  {name:'Mars',kt:215,sector:'Food'},
+  {name:'Mondelēz',kt:178,sector:'Food'},
+  {name:'Reckitt',kt:177,sector:'HPC'},
+  {name:"L'Oréal",kt:152,sector:'Cosmetics'},
+  {name:'SC Johnson',kt:67,sector:'HPC'},
+  {name:'Kellanova',kt:49,sector:'Food'},
+  {name:'FrieslandC.',kt:47,sector:'Food'},
+  {name:'Diageo',kt:45,sector:'Beverages'},
+  {name:'Essity',kt:44,sector:'HPC'},
+];
+
+const SECTOR_COLORS = {
+  'Beverages':'#2a78d6','Food & Bev.':'#3d8c40',
+  'Food':'#1baf7a','HPC':'#D85A30','Cosmetics':'#4a3aa7',
+};
+
+const SCORECARD = {
+  'coca-cola':{label:'The Coca-Cola Company',sector:'Beverages',kt:3606,
+    rrc18:99,rrc24:100,pcr18:9,pcr24:18,vchg:10,reuse24:1.1,
+    note:'Coca-Cola reached 100% RRC design and raised PCR from 9%→18%. However, its virgin plastic use is +10% above its 2019 baseline — bucking the signatory-wide downward trend. At 3,606kt, even small increases have massive absolute impact.',
+    color:'#2a78d6'},
+  'pepsico':{label:'PepsiCo',sector:'Food & Bev.',kt:2095,
+    rrc18:77,rrc24:78,pcr18:3,pcr24:11,vchg:-5,reuse24:0,
+    note:'PepsiCo holds the 2nd largest volume (2,095kt). PCR improved from 3%→11% and virgin plastic fell 5%, but RRC design barely moved (77%→78%). No reuse data is reported, making it a mid-tier performer despite outsized scale.',
+    color:'#3d8c40'},
+  'nestle':{label:'Nestlé',sector:'Food',kt:873,
+    rrc18:65,rrc24:82,pcr18:2,pcr24:30,vchg:-21,reuse24:0.8,
+    note:'Nestlé shows broad improvement — PCR tripled from 2%→30%, RRC grew 65%→82%, and virgin plastic fell 21%. One of the top performers in the food sector and a model for post-consumer recycled content scaling.',
+    color:'#1baf7a'},
+  'unilever':{label:'Unilever',sector:'HPC',kt:655,
+    rrc18:50,rrc24:65,pcr18:1,pcr24:21,vchg:-23,reuse24:0.1,
+    note:'Unilever has cut virgin plastic by 23% — the deepest reduction among large HPC signatories. RRC improved from 50%→65% and PCR from 1%→21%. Reuse remains near zero (0.1%), a persistent gap across household care companies.',
+    color:'#D85A30'},
+  'mars':{label:'Mars, Incorporated',sector:'Food',kt:215,
+    rrc18:19,rrc24:45,pcr18:0,pcr24:7,vchg:1,reuse24:0,
+    note:'Mars started from the weakest 2018 position — 19% RRC and 0% PCR. Progress has been made (RRC→45%, PCR→7%), but a +1% increase in virgin plastic and zero reuse shows the transformation is still in early stages.',
+    color:'#eda100'},
+  'loreal':{label:"L'Oréal",sector:'Cosmetics',kt:152,
+    rrc18:49,rrc24:49,pcr18:5,pcr24:37,vchg:-21,reuse24:6,
+    note:"L'Oréal stands out on recycled content (PCR 5%→37%) and leads all signatories on reuse at 6%. However, RRC design has stagnated at 49% — suggesting complex packaging formats that resist circular redesign. Volume is low (152kt) limiting absolute impact.",
+    color:'#4a3aa7'},
+  'sc-johnson':{label:'SC Johnson',sector:'HPC',kt:67,
+    rrc18:49,rrc24:64,pcr18:5,pcr24:25,vchg:-33,reuse24:10,
+    note:'SC Johnson is the standout performer: −33% virgin plastic (the largest reduction among all tracked signatories), 10% reuse (highest in the group), and PCR up from 5%→25%. Demonstrates what decisive commitment looks like in practice.',
+    color:'#0f6e56'},
+  'danone':{label:'Danone',sector:'Food',kt:670,
+    rrc18:76,rrc24:76,pcr18:7,pcr24:17,vchg:-17,reuse24:4,
+    note:'Danone holds solid baseline positions but RRC has not improved (76% both years). Virgin plastic fell 17% and PCR grew from 7%→17%. Its 4% reuse rate is above average for food companies, though far from the 100% ambition.',
+    color:'#1baf7a'},
+  'colgate':{label:'Colgate-Palmolive',sector:'HPC',kt:246,
+    rrc18:57,rrc24:76,pcr18:6,pcr24:21,vchg:-27,reuse24:0.9,
+    note:'Colgate-Palmolive has made consistent progress across all metrics — RRC from 57%→76%, PCR from 6%→21%, and virgin plastic down 27%. One of the better-rounded performers in the HPC sector, though reuse is still minimal at 0.9%.',
+    color:'#D85A30'},
+};
+
+/* ============================================================
+   PANEL 1 — VOLUME EXPLORER
+============================================================ */
+let volChart, activeSector='all', activeSort='vol', selectedCompany=null;
+
+function getFilteredData(){
+  let data = activeSector==='all' ? [...ALL_COMPANIES] : ALL_COMPANIES.filter(c=>c.sector===activeSector);
+  if(activeSort==='az') data.sort((a,b)=>a.name.localeCompare(b.name));
+  else data.sort((a,b)=>b.kt-a.kt);
+  return data;
+}
+
+function buildVolChart(){
+  const data = getFilteredData();
+  const h = Math.max(180, data.length * 34 + 60);
+  document.getElementById('vol-chart').parentElement.style.height = h+'px';
+  const colors = data.map(c=>{
+    const base = SECTOR_COLORS[c.sector]||'#888';
+    return (selectedCompany && c.name!==selectedCompany) ? base+'55' : base;
+  });
+  if(volChart) volChart.destroy();
+  volChart = new Chart(document.getElementById('vol-chart'),{
+    type:'bar',
+    data:{
+      labels:data.map(c=>c.name),
+      datasets:[{
+        label:'Volume (kt)',data:data.map(c=>c.kt),
+        backgroundColor:colors,borderRadius:4,borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      onClick:(e,els)=>{
+        if(!els.length){selectedCompany=null;clearVolCallout();buildVolChart();return;}
+        const co = data[els[0].index];
+        selectedCompany = co.name;
+        buildVolChart();
+        showVolCallout(co);
+        // cross-link to scorecard
+        const id = Object.keys(SCORECARD).find(k=>SCORECARD[k].label.includes(co.name.split('-')[0])||co.name.includes(SCORECARD[k].label.split(' ')[0]));
+        if(id){document.getElementById('co-a').value=id;renderScorecard();}
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const total=9388;
+            const pct=(ctx.raw/total*100).toFixed(1);
+            return ` ${ctx.raw.toLocaleString()}kt  (${pct}% of total tracked)`;
+          }
+        }}
+      },
+      scales:{
+        x:{grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:11},callback:v=>v>=1000?(v/1000).toFixed(1)+'M kt':v+'kt'}},
+        y:{grid:{display:false},ticks:{color:'#1a2b22',font:{size:11}}}
+      }
+    }
+  });
+}
+
+function showVolCallout(co){
+  const el=document.getElementById('vol-callout');
+  const pct=(co.kt/9388*100).toFixed(1);
+  const sc=Object.values(SCORECARD).find(s=>s.label.includes(co.name.split('-')[0]));
+  let extra = sc ? ` Virgin plastic change vs baseline: <b>${sc.vchg>0?'+':''}${sc.vchg}%</b>.` : '';
+  el.innerHTML=`<b>${co.name}</b> — ${co.kt.toLocaleString()}kt (${pct}% of all tracked volume) · Sector: ${co.sector}.${extra} <span style="cursor:pointer;text-decoration:underline;" onclick="clearVolCallout()">Clear</span>`;
+  el.style.display='block';
+}
+function clearVolCallout(){
+  document.getElementById('vol-callout').style.display='none';
+  selectedCompany=null;buildVolChart();
+}
+
+function filterSector(btn){
+  document.querySelectorAll('#sector-filters .btn').forEach(b=>{b.classList.remove('active');});
+  btn.classList.add('active');
+  activeSector=btn.dataset.sector;
+  selectedCompany=null;clearVolCallout();buildVolChart();
+}
+function setSort(s,btn){
+  activeSort=s;
+  document.getElementById('sort-vol').classList.toggle('active',s==='vol');
+  document.getElementById('sort-az').classList.toggle('active',s==='az');
+  buildVolChart();
+}
+
+buildVolChart();
+
+/* ============================================================
+   PANEL 2 — INDUSTRY TRENDS
+============================================================ */
+const TREND_FULL = {
+  labels:['2018','2023','2024'],
+  pcr:[5,14,16],
+  mkt:[0,null,13],
+  sig:[0,null,-6],
+};
+let trendChart;
+let metricOn={pcr:true,mkt:true,sig:true};
+let shownYears=3;
+
+function buildTrendChart(yearCount){
+  yearCount=yearCount||shownYears;
+  const labels=TREND_FULL.labels.slice(0,yearCount);
+  const ds=[
+    {label:'PCR content %',
+     data:TREND_FULL.pcr.slice(0,yearCount),
+     borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,.1)',
+     fill:true,borderWidth:2.5,tension:.3,
+     pointRadius:6,pointBackgroundColor:'#1D9E75',pointBorderColor:'#fff',pointBorderWidth:2,
+     hidden:!metricOn.pcr},
+    {label:'Market virgin plastic Δ% vs 2018',
+     data:TREND_FULL.mkt.slice(0,yearCount),
+     borderColor:'#D85A30',borderWidth:2,borderDash:[5,4],
+     tension:.2,fill:false,
+     pointRadius:[6,0,6].slice(0,yearCount),
+     pointBackgroundColor:'#D85A30',pointBorderColor:'#fff',pointBorderWidth:2,
+     hidden:!metricOn.mkt},
+    {label:'Signatory virgin plastic Δ% vs 2018',
+     data:TREND_FULL.sig.slice(0,yearCount),
+     borderColor:'#2a78d6',borderWidth:2,borderDash:[3,3],
+     tension:.2,fill:false,
+     pointRadius:[6,0,6].slice(0,yearCount),
+     pointBackgroundColor:'#2a78d6',pointBorderColor:'#fff',pointBorderWidth:2,
+     hidden:!metricOn.sig},
+  ];
+  if(trendChart) trendChart.destroy();
+  trendChart=new Chart(document.getElementById('trend-chart'),{
+    type:'line',data:{labels,datasets:ds},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>ctx.raw!==null?`${ctx.dataset.label}: ${ctx.raw}%`:null}}
+      },
+      scales:{
+        y:{grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:11},callback:v=>(v>=0?'+':'')+v+'%'}},
+        x:{grid:{display:false},ticks:{color:'#6b7f74',font:{size:11}}}
+      },
+      animation:{duration:600}
+    }
+  });
+}
+buildTrendChart();
+
+function toggleMetric(key,btn){
+  metricOn[key]=!metricOn[key];
+  btn.classList.toggle('active',metricOn[key]);
+  if(trendChart){
+    const idx={pcr:0,mkt:1,sig:2}[key];
+    trendChart.data.datasets[idx].hidden=!metricOn[key];
+    trendChart.update();
+  }
+}
+
+function animateTrend(){
+  shownYears=1;
+  buildTrendChart(1);
+  setTimeout(()=>{shownYears=2;buildTrendChart(2);},900);
+  setTimeout(()=>{shownYears=3;buildTrendChart(3);},1800);
+}
+function resetTrend(){shownYears=3;buildTrendChart(3);}
+
+// Animate progress bars
+function animateBars(){
+  const bars=[
+    {id:'bar-rrc',pct:72},
+    {id:'bar-elim',pct:68},
+    {id:'bar-reuse',pct:1.2},
+  ];
+  bars.forEach(b=>{
+    const el=document.getElementById(b.id);
+    setTimeout(()=>{el.style.width=b.pct+'%';},300);
+  });
+}
+setTimeout(animateBars,500);
+
+/* ============================================================
+   PANEL 3 — COMPANY SCORECARD
+============================================================ */
+let scorecardChart, compareMode=false, viewMode='bar';
+
+function toggleCompare(){
+  compareMode=!compareMode;
+  const row=document.getElementById('compare-b-row');
+  const btn=document.getElementById('compare-toggle');
+  row.style.display=compareMode?'flex':'none';
+  btn.textContent=compareMode?'− Remove':'+ Compare';
+  btn.classList.toggle('active-red',compareMode);
+  renderScorecard();
+}
+
+function setViewMode(mode,btn){
+  viewMode=mode;
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderScorecard();
+}
+
+function renderScorecard(){
+  const idA=document.getElementById('co-a').value;
+  const dA=SCORECARD[idA];
+  if(!dA) return;
+
+  const idB=compareMode?document.getElementById('co-b').value:null;
+  const dB=idB?SCORECARD[idB]:null;
+
+  // Stat cards (single mode only)
+  const cards=document.getElementById('stat-cards');
+  if(!compareMode){
+    const vColor=dA.vchg<=0?'var(--green)':'var(--red)';
+    cards.innerHTML=`
+      <div class="stat-card" onclick="highlightMetric(0)" data-metric="0">
+        <div class="stat-key">RRC % (2024)</div>
+        <div class="stat-num" style="color:var(--green);">${dA.rrc24}%</div>
+        <div class="stat-diff" style="color:var(--muted);">was ${dA.rrc18}% in 2018 (+${dA.rrc24-dA.rrc18}pp)</div>
+      </div>
+      <div class="stat-card" onclick="highlightMetric(1)" data-metric="1">
+        <div class="stat-key">PCR content % (2024)</div>
+        <div class="stat-num" style="color:var(--blue);">${dA.pcr24}%</div>
+        <div class="stat-diff" style="color:var(--muted);">was ${dA.pcr18}% in 2018 (+${dA.pcr24-dA.pcr18}pp)</div>
+      </div>
+      <div class="stat-card" onclick="highlightMetric(2)" data-metric="2">
+        <div class="stat-key">Virgin plastic Δ vs baseline</div>
+        <div class="stat-num" style="color:${vColor};">${dA.vchg>0?'+':''}${dA.vchg}%</div>
+        <div class="stat-diff" style="color:var(--muted);">target: reduce from baseline</div>
+      </div>
+      <div class="stat-card" onclick="highlightMetric(3)" data-metric="3">
+        <div class="stat-key">Reusable packaging (2024)</div>
+        <div class="stat-num" style="color:${dA.reuse24>=3?'var(--green)':'var(--red)'};">${dA.reuse24}%</div>
+        <div class="stat-diff" style="color:var(--muted);">2025 ambition: 100%</div>
+      </div>`;
+    cards.style.display='grid';
+  } else {
+    cards.style.display='none';
+  }
+
+  // Callout
+  const co=document.getElementById('sc-callout');
+  if(!compareMode){
+    co.className='callout';
+    co.innerHTML=`<b>${dA.label}:</b> ${dA.note}`;
+  } else if(dB){
+    const winner = dA.vchg < dB.vchg ? dA.label : dB.label;
+    co.className='callout';
+    co.innerHTML=`Comparing <b>${dA.label}</b> vs <b>${dB.label}</b>. ${winner} leads on virgin plastic reduction. Click metric cards to highlight individual dimensions.`;
+  }
+
+  // Chart
+  if(scorecardChart) scorecardChart.destroy();
+  if(viewMode==='radar'){
+    buildRadar(dA,dB);
+  } else {
+    buildBarChart(dA,dB);
+  }
+}
+
+function buildBarChart(dA,dB){
+  const labels=['RRC %','PCR %','Reuse %'];
+  if(!compareMode){
+    // Before/after
+    scorecardChart=new Chart(document.getElementById('scorecard-chart'),{
+      type:'bar',
+      data:{
+        labels,
+        datasets:[
+          {label:'2018 baseline',data:[dA.rrc18,dA.pcr18,dA.reuse24*0],
+           backgroundColor:'rgba(29,158,117,.3)',borderRadius:4,borderSkipped:false},
+          {label:'2024 actual',data:[dA.rrc24,dA.pcr24,dA.reuse24],
+           backgroundColor:dA.color||'#1D9E75',borderRadius:4,borderSkipped:false},
+        ]
+      },
+      options:getBarOpts()
+    });
+  } else {
+    // Side by side
+    scorecardChart=new Chart(document.getElementById('scorecard-chart'),{
+      type:'bar',
+      data:{
+        labels,
+        datasets:[
+          {label:dA.label,data:[dA.rrc24,dA.pcr24,dA.reuse24],
+           backgroundColor:dA.color||'#1D9E75',borderRadius:4,borderSkipped:false},
+          {label:dB.label,data:[dB.rrc24,dB.pcr24,dB.reuse24],
+           backgroundColor:dB.color||'#2a78d6',borderRadius:4,borderSkipped:false},
+        ]
+      },
+      options:getBarOpts()
+    });
+  }
+}
+
+function getBarOpts(){
+  return{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:true,position:'bottom',labels:{color:'#6b7f74',font:{size:11},boxWidth:10,padding:10}},
+      tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}
+    },
+    scales:{
+      y:{min:0,max:105,grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:11},callback:v=>v+'%'}},
+      x:{grid:{display:false},ticks:{color:'#1a2b22',font:{size:11}}}
+    },
+    animation:{duration:500}
+  };
+}
+
+function buildRadar(dA,dB){
+  // Normalize to 0-100 scale: RRC(÷1), PCR(×2.5, max 100), Reuse(×10, max 100), Virgin reduction(inverted, ×3, max 100)
+  function norm(d){return[d.rrc24, Math.min(100,d.pcr24*2.5), Math.min(100,d.reuse24*10), Math.min(100,Math.max(0,-d.vchg*3))];}
+  const datasets=[{
+    label:dA.label,data:norm(dA),
+    borderColor:dA.color||'#1D9E75',backgroundColor:(dA.color||'#1D9E75')+'33',
+    borderWidth:2,pointRadius:4,pointBackgroundColor:dA.color||'#1D9E75',
+  }];
+  if(dB) datasets.push({
+    label:dB.label,data:norm(dB),
+    borderColor:dB.color||'#2a78d6',backgroundColor:(dB.color||'#2a78d6')+'33',
+    borderWidth:2,pointRadius:4,pointBackgroundColor:dB.color||'#2a78d6',
+  });
+  scorecardChart=new Chart(document.getElementById('scorecard-chart'),{
+    type:'radar',
+    data:{labels:['RRC design','PCR content (×2.5)','Reuse (×10)','Virgin reduction (×3)'],datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7f74',font:{size:11},boxWidth:10,padding:8}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${Math.round(ctx.raw)} pts`}}},
+      scales:{r:{min:0,max:100,grid:{color:'#e4ede8'},
+        angleLines:{color:'#e4ede8'},
+        pointLabels:{font:{size:10},color:'#6b7f74'},
+        ticks:{display:false}}},
+      animation:{duration:500}
+    }
+  });
+}
+
+let highlightedMetric=null;
+function highlightMetric(idx){
+  document.querySelectorAll('.stat-card').forEach((c,i)=>{c.classList.toggle('highlight',i===idx);});
+  if(scorecardChart && scorecardChart.data.datasets){
+    scorecardChart.data.datasets.forEach(ds=>{
+      const orig=ds._origColors||ds.backgroundColor;
+      if(!ds._origColors) ds._origColors=[].concat(orig);
+      ds.backgroundColor=ds._origColors.map((c,i)=>i===idx?c:(typeof c==='string'?c+'99':c));
+    });
+    scorecardChart.update();
+  }
+}
+
+renderScorecard();
+</script>
+</body>
+</html>
