@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Deliverable B — FMCG Plastic Packaging Infographic</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8faf9;--surface:#ffffff;--surface2:#f2f5f3;
+  --text:#1a2b22;--muted:#6b7f74;--border:#d4ddd8;
+  --green:#0f6e56;--green-light:#e1f5ee;--green-mid:#1D9E75;
+  --red:#993c1d;--red-light:#faece7;--red-mid:#D85A30;
+  --amber:#854f0b;--amber-mid:#eda100;
+  --blue:#185fa5;--blue-mid:#2a78d6;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;}
+.page{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
+/* Header */
+.header{padding:2rem 0 1.5rem;border-bottom:1px solid var(--border);}
+.eyebrow{font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:.5rem;font-weight:500;}
+.headline{font-size:clamp(22px,4vw,34px);font-weight:600;color:var(--text);line-height:1.2;margin-bottom:.6rem;}
+.subhead{font-size:14px;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:1.5rem;}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.stat-card{border-radius:10px;padding:14px 16px;border:1px solid var(--border);}
+.stat-card.neutral{background:var(--surface2);}
+.stat-card.good{background:var(--green-light);border-color:#9fe1cb;}
+.stat-card.bad{background:var(--red-light);border-color:#f5c4b3;}
+.stat-num{font-size:clamp(22px,3.5vw,32px);font-weight:600;line-height:1.1;}
+.stat-card.neutral .stat-num{color:var(--text);}
+.stat-card.good .stat-num{color:var(--green);}
+.stat-card.bad .stat-num{color:var(--red);}
+.stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
+/* Sections */
+.section{padding:1.75rem 0;border-bottom:1px solid var(--border);}
+.section:last-child{border-bottom:none;}
+.chart-type{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.section-title{font-size:clamp(16px,2.5vw,20px);font-weight:600;color:var(--text);margin-bottom:.5rem;}
+.section-body{font-size:13px;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:1.25rem;}
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+.legend-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+/* Treemap */
+#treemap-wrap{width:100%;overflow:hidden;border-radius:8px;}
+/* Slope chart */
+#slope-wrap{width:100%;}
+/* Charts */
+.chart-wrap{position:relative;width:100%;}
+/* Donut pair */
+.donut-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.donut-cell{text-align:center;}
+.donut-wrap{position:relative;max-width:190px;margin:0 auto;}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;text-align:center;}
+.donut-num{font-size:22px;font-weight:600;line-height:1;}
+.donut-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.donut-label{font-size:12px;color:var(--muted);margin-top:8px;}
+.donut-label strong{color:var(--text);display:block;font-size:13px;}
+/* Recommendations */
+.rec-list{display:flex;flex-direction:column;gap:10px;}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.rec-badge{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;margin-top:1px;}
+.rec-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.rec-body{font-size:13px;color:var(--muted);line-height:1.6;}
+.source{font-size:11px;color:var(--muted);margin-top:1rem;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<header class="header">
+  <p class="eyebrow">ESG · Environmental · FMCG Plastic Packaging · 2018–2024</p>
+  <h1 class="headline">The plastic packaging commitment gap</h1>
+  <p class="subhead">16 FMCG companies pledged to reduce plastic packaging under the Ellen MacArthur Foundation Global Commitment in 2018. Six years in, the data reveals a diverging story of leaders and laggards.</p>
+  <div class="stat-row">
+    <div class="stat-card neutral"><div class="stat-num">9.4M</div><div class="stat-label">metric tonnes tracked (2024)</div></div>
+    <div class="stat-card good"><div class="stat-num">−6%</div><div class="stat-label">signatory virgin plastic vs 2018</div></div>
+    <div class="stat-card bad"><div class="stat-num">+13%</div><div class="stat-label">global market virgin plastic vs 2018</div></div>
+  </div>
+</header>
+
+<!-- SECTION 1: TREEMAP -->
+<section class="section">
+  <p class="chart-type">Chart 1 · Treemap · Composition</p>
+  <h2 class="section-title">Two companies carry 61% of tracked plastic</h2>
+  <p class="section-body">Coca-Cola (3,606kt) and PepsiCo (2,095kt) alone account for 5,701kt — more than all other 14 signatories combined. Any industry-wide progress depends disproportionately on what these two companies do.</p>
+  <div class="legend" id="treemap-legend"></div>
+  <div id="treemap-wrap"><svg id="treemap-svg" width="100%" aria-label="Treemap showing plastic packaging volume by company, Coca-Cola and PepsiCo dominate" role="img"><title>Plastic packaging volume distribution by FMCG company 2024</title></svg></div>
+</section>
+
+<!-- SECTION 2: SLOPE CHART -->
+<section class="section">
+  <p class="chart-type">Chart 2 · Slope chart · Before-after divergence</p>
+  <h2 class="section-title">Signatories diverge 19 points from the global market</h2>
+  <p class="section-body">From the same 2018 baseline, the global market grew virgin plastic use by 13% while committed companies cut theirs by 6% — demonstrating that voluntary targets, when tracked publicly, do change behavior.</p>
+  <div id="slope-wrap">
+    <svg id="slope-svg" viewBox="0 0 780 210" width="100%" role="img" aria-label="Slope chart: global market went to +13%, signatories went to -6% from 2018 baseline">
+      <title>Virgin plastic use divergence: market vs signatories, 2018 to 2024</title>
+      <desc>From a shared 2018 baseline of 0%, the global packaging market increased virgin plastic by 13% while Global Commitment signatories reduced theirs by 6%, a 19 percentage point divergence.</desc>
+    </svg>
+  </div>
+</section>
+
+<!-- SECTION 3: AREA CHART -->
+<section class="section">
+  <p class="chart-type">Chart 3 · Area chart · Trend over time</p>
+  <h2 class="section-title">Post-consumer recycled content has tripled — but lags its own target</h2>
+  <p class="section-body">PCR content rose from 5% in 2018 to 16% in 2024, a genuine 3× improvement. However, signatories set their own average PCR target at 22% back in 2019, meaning the group currently sits 6 percentage points below the pledges they made to themselves.</p>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#1D9E75;"></div>PCR content (actual)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#888;height:3px;width:16px;border-radius:2px;"></div>22% self-set 2025 target</div>
+  </div>
+  <div class="chart-wrap" style="height:190px;"><canvas id="area-chart" role="img" aria-label="Area chart: PCR content 5% in 2018, 14% in 2023, 16% in 2024 vs 22% target">PCR content: 2018 5%, 2023 14%, 2024 16%; target: 22%</canvas></div>
+</section>
+
+<!-- SECTION 4: DONUT CHARTS -->
+<section class="section">
+  <p class="chart-type">Chart 4 · Donut chart · Part-to-whole</p>
+  <h2 class="section-title">Recyclability advancing — reuse nearly absent</h2>
+  <p class="section-body">The 2025 target for every signatory is 100% reusable, recyclable, or compostable packaging, plus an ambition that packaging is actually reused at scale. At 72% on RRC design, the group is progressing — but at 1.2% actual reusable packaging, the systemic change has barely begun.</p>
+  <div class="donut-grid">
+    <div class="donut-cell">
+      <div class="donut-wrap" style="height:170px;">
+        <canvas id="rrc-donut" role="img" aria-label="Donut showing 72% RRC packaging vs 100% target">72% RRC packaging vs 100% target</canvas>
+        <div class="donut-center"><div class="donut-num" style="color:#0f6e56;">72%</div><div class="donut-sub">of 100% target</div></div>
+      </div>
+      <p class="donut-label"><strong>RRC packaging (2024)</strong>Reusable, recyclable, or compostable</p>
+    </div>
+    <div class="donut-cell">
+      <div class="donut-wrap" style="height:170px;">
+        <canvas id="reuse-donut" role="img" aria-label="Donut showing only 1.2% reusable packaging vs 100% ambition">1.2% reusable packaging vs 100% ambition</canvas>
+        <div class="donut-center"><div class="donut-num" style="color:#993c1d;">1.2%</div><div class="donut-sub">actually reusable</div></div>
+      </div>
+      <p class="donut-label"><strong>Reusable packaging (2024)</strong>Against a universal 2025 ambition of 100%</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: RECOMMENDATIONS -->
+<section class="section" style="background:var(--surface2);border-radius:12px;padding:1.5rem;margin-top:.5rem;">
+  <p class="chart-type">Data-driven recommendations</p>
+  <h2 class="section-title" style="margin-bottom:1rem;">Three actions for advocates and procurement teams</h2>
+  <div class="rec-list">
+    <div class="rec-card">
+      <div class="rec-badge" style="background:var(--red-mid);">1</div>
+      <div><p class="rec-title">Prioritise Coca-Cola and PepsiCo engagement — immediately</p><p class="rec-body">These two companies control 61% of tracked volume. Coca-Cola's virgin plastic use has risen +10% vs its baseline despite a signed commitment to reduce it. Any NGO campaign or procurement screen that treats signatories as a homogeneous "responsible" group is missing the scale of this concentration problem.</p></div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-badge" style="background:var(--green-mid);">2</div>
+      <div><p class="rec-title">Redirect advocacy to the reuse gap — not just recyclability</p><p class="rec-body">Packaging designed for recycling (RRC 72%) is progressing. But actual reusable packaging at 1.2% is essentially flat from 2018's &lt;3%. Funded reuse pilots, deposit return scheme legislation, and time-bound reuse targets should be the next pressure point, not more recycling pledges.</p></div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-badge" style="background:var(--amber-mid);">3</div>
+      <div><p class="rec-title">Benchmark PCR progress against 22%, not the 5% baseline</p><p class="rec-body">Achieving 16% PCR looks strong against a 5% baseline. But signatories' own 2019 self-declared average target was 22% by 2025. Procurement teams and ESG rating agencies should use the 22% benchmark to score supplier progress — the current 16% figure is a 27% shortfall from the pledges companies made to themselves.</p></div>
+    </div>
+  </div>
+  <p class="source">Source: Ellen MacArthur Foundation Global Commitment Progress Reports (2019 baseline, 2025 using 2024 data) · ellenmacarthurfoundation.org</p>
+</section>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ===== DATA ===== */
+const companies = [
+  {name:'Coca-Cola',kt:3606,sector:'Beverages'},
+  {name:'PepsiCo',kt:2095,sector:'Food & Bev.'},
+  {name:'Nestlé',kt:873,sector:'Food'},
+  {name:'Danone',kt:670,sector:'Food'},
+  {name:'Unilever',kt:655,sector:'HPC'},
+  {name:'Henkel',kt:269,sector:'HPC'},
+  {name:'Colgate-P.',kt:246,sector:'HPC'},
+  {name:'Mars',kt:215,sector:'Food'},
+  {name:'Mondelēz',kt:178,sector:'Food'},
+  {name:'Reckitt',kt:177,sector:'HPC'},
+  {name:"L'Oréal",kt:152,sector:'Cosmetics'},
+  {name:'SC Johnson',kt:67,sector:'HPC'},
+  {name:'Kellanova',kt:49,sector:'Food'},
+  {name:'FrieslandC.',kt:47,sector:'Food'},
+  {name:'Diageo',kt:45,sector:'Beverages'},
+  {name:'Essity',kt:44,sector:'HPC'},
+];
+const SECTOR_COLORS = {
+  'Beverages':'#2a78d6',
+  'Food & Bev.':'#3d8c40',
+  'Food':'#1baf7a',
+  'HPC':'#D85A30',
+  'Cosmetics':'#4a3aa7',
+};
+
+/* ===== TREEMAP LEGEND ===== */
+const legendEl = document.getElementById('treemap-legend');
+Object.entries(SECTOR_COLORS).forEach(([s,c])=>{
+  const el = document.createElement('div');
+  el.className = 'legend-item';
+  el.innerHTML = `<div class="legend-swatch" style="background:${c}"></div>${s}`;
+  legendEl.appendChild(el);
+});
+
+/* ===== TREEMAP ===== */
+function buildTreemap(){
+  const wrap = document.getElementById('treemap-wrap');
+  const W = wrap.clientWidth || 760;
+  const H = Math.max(180, Math.round(W * 0.27));
+  const svgEl = document.getElementById('treemap-svg');
+  svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svgEl.setAttribute('height', H);
+
+  const root = d3.hierarchy({name:'root',children:companies})
+    .sum(d=>d.kt).sort((a,b)=>b.value-a.value);
+  d3.treemap().size([W,H]).padding(2).round(true)(root);
+
+  const svg = d3.select('#treemap-svg');
+  svg.selectAll('*').remove();
+
+  const leaf = svg.selectAll('g').data(root.leaves()).join('g')
+    .attr('transform',d=>`translate(${d.x0},${d.y0})`);
+
+  leaf.append('rect')
+    .attr('width',d=>Math.max(0,d.x1-d.x0))
+    .attr('height',d=>Math.max(0,d.y1-d.y0))
+    .attr('fill',d=>SECTOR_COLORS[d.data.sector]||'#888')
+    .attr('opacity',.82).attr('rx',3);
+
+  leaf.each(function(d){
+    const bw=d.x1-d.x0, bh=d.y1-d.y0;
+    const g=d3.select(this);
+    const fs=Math.min(13, Math.max(9, bw/9));
+    if(bw>44&&bh>22){
+      g.append('text').attr('x',5).attr('y',fs+3)
+        .attr('fill','rgba(255,255,255,.95)').attr('font-size',fs).attr('font-weight','600')
+        .text(d.data.name);
+    }
+    if(bw>70&&bh>40){
+      g.append('text').attr('x',5).attr('y',fs+18)
+        .attr('fill','rgba(255,255,255,.75)').attr('font-size',Math.max(9,fs-2))
+        .text(`${(d.data.kt/1000).toFixed(1)}M t`);
+    }
+  });
+}
+buildTreemap();
+window.addEventListener('resize',buildTreemap);
+
+/* ===== SLOPE CHART ===== */
+(function(){
+  const svg = document.getElementById('slope-svg');
+  const VW=780, VH=210;
+  const x2018=195, x2024=530;
+  const y0=115; // baseline (0%)
+  const yScale=5.2; // px per percentage point
+  const yMkt=y0 - 13*yScale; // +13% → up
+  const ySig=y0 + 6*yScale;  // -6% → down
+
+  svg.innerHTML=`
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <!-- Year column lines -->
+  <line x1="${x2018}" y1="30" x2="${x2018}" y2="190" stroke="#d4ddd8" stroke-width="0.5"/>
+  <line x1="${x2024}" y1="30" x2="${x2024}" y2="190" stroke="#d4ddd8" stroke-width="0.5"/>
+  <!-- Year labels -->
+  <text x="${x2018}" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="#1a2b22">2018</text>
+  <text x="${x2024}" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="#1a2b22">2024</text>
+  <!-- 0% baseline -->
+  <line x1="${x2018-20}" y1="${y0}" x2="${x2024+20}" y2="${y0}" stroke="#d4ddd8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="${x2018-28}" y="${y0+4}" text-anchor="end" font-size="11" fill="#6b7f74">0%</text>
+  <!-- Scale hints -->
+  <text x="${x2018-28}" y="${yMkt+4}" text-anchor="end" font-size="10" fill="#e07060">+13%</text>
+  <text x="${x2018-28}" y="${ySig+4}" text-anchor="end" font-size="10" fill="#1baf7a">−6%</text>
+  <line x1="${x2018-22}" y1="${yMkt}" x2="${x2018-20}" y2="${yMkt}" stroke="#e07060" stroke-width="0.5"/>
+  <line x1="${x2018-22}" y1="${ySig}" x2="${x2018-20}" y2="${ySig}" stroke="#1baf7a" stroke-width="0.5"/>
+  <!-- Market slope (red) -->
+  <line x1="${x2018}" y1="${y0}" x2="${x2024}" y2="${yMkt}" stroke="#D85A30" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="${x2024}" cy="${yMkt}" r="6" fill="#D85A30" stroke="#fff" stroke-width="1.5"/>
+  <text x="${x2024+16}" y="${yMkt-4}" font-size="16" font-weight="700" fill="#D85A30">+13%</text>
+  <text x="${x2024+16}" y="${yMkt+14}" font-size="11" fill="#993c1d">Global market</text>
+  <!-- Signatories slope (green) -->
+  <line x1="${x2018}" y1="${y0}" x2="${x2024}" y2="${ySig}" stroke="#0f6e56" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="${x2024}" cy="${ySig}" r="6" fill="#0f6e56" stroke="#fff" stroke-width="1.5"/>
+  <text x="${x2024+16}" y="${ySig+5}" font-size="16" font-weight="700" fill="#0f6e56">−6%</text>
+  <text x="${x2024+16}" y="${ySig+22}" font-size="11" fill="#0f6e56">Signatories</text>
+  <!-- Shared origin -->
+  <circle cx="${x2018}" cy="${y0}" r="7" fill="#1a2b22" stroke="#fff" stroke-width="2"/>
+  <text x="${x2018}" y="200" text-anchor="middle" font-size="11" fill="#6b7f74">Shared baseline</text>
+  <!-- Divergence bracket -->
+  <line x1="${x2024+4}" y1="${yMkt+7}" x2="${x2024+4}" y2="${ySig-7}" stroke="#d4ddd8" stroke-width="0.5" stroke-dasharray="3 2"/>
+  <text x="${(x2024+4+VW)/2-10}" y="${(yMkt+ySig)/2+4}" text-anchor="middle" font-size="11" fill="#6b7f74">19pp gap</text>
+  `;
+})();
+
+/* ===== AREA CHART ===== */
+new Chart(document.getElementById('area-chart'),{
+  type:'line',
+  data:{
+    labels:['2018','2023','2024'],
+    datasets:[
+      {label:'PCR content',data:[5,14,16],
+       borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,.12)',
+       borderWidth:2.5,fill:true,tension:.35,
+       pointRadius:7,pointBackgroundColor:'#1D9E75',pointBorderColor:'#fff',pointBorderWidth:2},
+      {label:'2019 avg target (22%)',data:[22,22,22],
+       borderColor:'#888',borderWidth:1.5,borderDash:[5,4],
+       pointRadius:0,fill:false,tension:0},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}
+    },
+    scales:{
+      y:{min:0,max:26,grid:{color:'#e4ede8'},
+         ticks:{color:'#6b7f74',callback:v=>v+'%',font:{size:11}}},
+      x:{grid:{display:false},ticks:{color:'#6b7f74',font:{size:11}}}
+    }
+  }
+});
+
+/* ===== DONUT CHARTS ===== */
+new Chart(document.getElementById('rrc-donut'),{
+  type:'doughnut',
+  data:{datasets:[{data:[72,28],backgroundColor:['#1D9E75','#e0ebe6'],borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'72%',
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>ctx.dataIndex===0?'72% achieved':'28% remaining'}}}}
+});
+new Chart(document.getElementById('reuse-donut'),{
+  type:'doughnut',
+  data:{datasets:[{data:[1.2,98.8],backgroundColor:['#D85A30','#e0ebe6'],borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'72%',
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>ctx.dataIndex===0?'1.2% reusable':'98.8% single-use'}}}}
+});
+</script>
+</body>
+</html>
