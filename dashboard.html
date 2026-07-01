@@ -2,19 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Deliverable C — FMCG Plastic Packaging Interactive Dashboard</title>
+<title>Deliverable C — FMCG Plastic Packaging Dashboard</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#f0f4f2;--sur:#fff;--sur2:#f5f8f6;--txt:#1a2b22;--mu:#6b7f74;--br:#d4ddd8;
---gn:#0f6e56;--gl:#e1f5ee;--gm:#1D9E75;--rd:#993c1d;--rl:#faece7;--rm:#D85A30;
---am:#eda100;--bl:#185fa5;--bm:#2a78d6;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--txt);}
+--gn:#0f6e56;--gl:#e1f5ee;--gm:#1D9E75;--rd:#993c1d;--rl:#faece7;--rm:#D85A30;--am:#eda100;--bl:#185fa5;--bm:#2a78d6;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--txt);}
 .page{max-width:1160px;margin:0 auto;padding:1rem;}
+/* topbar */
 .topbar{background:var(--sur);border:1px solid var(--br);border-radius:12px;padding:1rem 1.4rem;margin-bottom:.9rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
 .topbar h1{font-size:18px;font-weight:700;}.topbar p{font-size:11px;color:var(--mu);margin-top:2px;}
 .topbar-r{font-size:11px;color:var(--mu);text-align:right;}.topbar-r b{display:block;font-size:13px;font-weight:700;color:var(--txt);}
-
-/* ── KPI strip ── */
+/* kpis */
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:.5rem;}
 .kpi{background:var(--sur);border:1px solid var(--br);border-radius:10px;padding:11px 13px;transition:border-color .2s,background .2s;}
 .kpi.active{border-color:var(--gm);background:var(--gl);}
@@ -25,13 +24,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .kpi.r .kpi-val,.kpi.r .kpi-sub{color:var(--rd);}
 .kpi.b .kpi-val,.kpi.b .kpi-sub{color:var(--bl);}
 .kpi.n .kpi-val{color:var(--txt);}
-
 /* context bar */
 .ctx-bar{display:none;align-items:center;gap:8px;background:var(--sur);border:1px solid var(--gm);border-radius:8px;padding:7px 12px;margin-bottom:.9rem;font-size:12px;color:var(--gn);}
 .ctx-bar b{font-weight:700;}
 .ctx-reset{margin-left:auto;font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--gm);background:transparent;color:var(--gn);cursor:pointer;font-family:inherit;}
 .ctx-reset:hover{background:var(--gm);color:#fff;}
-
+/* layout */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem;}
 .panel{background:var(--sur);border:1px solid var(--br);border-radius:12px;padding:1rem 1.15rem;display:flex;flex-direction:column;gap:9px;}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;}
@@ -47,13 +45,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 select{font-size:11px;padding:4px 9px;border-radius:8px;border:1px solid var(--br);background:var(--sur);color:var(--txt);cursor:pointer;font-family:inherit;outline:none;max-width:190px;}
 select:focus{border-color:var(--gm);}
 .cw{position:relative;width:100%;}
-.prog-list{display:flex;flex-direction:column;gap:8px;}
-.pr{display:flex;flex-direction:column;gap:2px;}
-.prh{display:flex;justify-content:space-between;align-items:center;}
-.prn{font-size:10px;color:var(--mu);}.prv{font-size:10px;font-weight:700;}
-.track{background:var(--sur2);border-radius:3px;height:6px;overflow:hidden;border:1px solid var(--br);}
-.bf{height:100%;border-radius:3px;width:0;transition:width 1s cubic-bezier(.4,0,.2,1);}
-.prnote{font-size:9px;color:var(--mu);}
+
+/* ── METRIC CARDS (replaces dumb progress bars) ── */
+.metric-card{background:var(--sur2);border:1px solid var(--br);border-radius:9px;padding:10px 13px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none;}
+.metric-card:hover{border-color:var(--gm);background:var(--gl);}
+.metric-card.open{border-color:var(--gm);}
+.mc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.mc-name{font-size:11px;font-weight:600;color:var(--txt);}
+.mc-val{font-size:11px;font-weight:700;}
+.mc-hint{font-size:9px;color:var(--mu);margin-bottom:5px;}
+.track{background:#e0ebe6;border-radius:3px;height:7px;overflow:hidden;}
+.bf{height:100%;border-radius:3px;width:0;transition:width 1.1s cubic-bezier(.4,0,.2,1);}
+.mc-expand{display:none;margin-top:9px;padding-top:9px;border-top:1px solid var(--br);}
+.mc-expand.show{display:block;}
+.mc-def{font-size:11px;color:var(--txt);line-height:1.6;margin-bottom:6px;}
+.mc-def b{color:var(--gn);}
+.mc-why{font-size:10px;color:var(--mu);line-height:1.5;border-left:2px solid var(--gm);padding-left:7px;}
+.mc-toggle{font-size:9px;color:var(--gm);float:right;margin-top:-2px;}
+
+/* ── REGION CARDS ── */
+.rg-hint{font-size:10px;color:var(--mu);text-align:center;padding:3px 0 1px;letter-spacing:.03em;}
+.rg-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}
+.rg-card{border-radius:9px;padding:9px 10px;border:2px solid;cursor:pointer;transition:transform .13s,box-shadow .13s,border-color .13s;position:relative;}
+.rg-card::after{content:"click to filter";position:absolute;bottom:4px;right:6px;font-size:8px;color:rgba(0,0,0,.3);opacity:0;transition:opacity .15s;}
+.rg-card:hover::after{opacity:1;}
+.rg-card:hover{transform:translateY(-3px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.rg-card.sel{box-shadow:0 4px 16px rgba(29,158,117,.25);}
+.rg-name{font-size:9px;color:var(--mu);margin-bottom:3px;font-weight:500;}
+.rg-vol{font-size:14px;font-weight:700;}
+.rg-pcr{font-size:10px;margin-top:2px;}
+/* scorecard */
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
 .sc{background:var(--sur2);border:1px solid var(--br);border-radius:7px;padding:8px 10px;cursor:pointer;transition:border-color .13s;}
 .sc:hover,.sc.hl{border-color:var(--gm);}
@@ -61,16 +82,6 @@ select:focus{border-color:var(--gm);}
 .sn{font-size:16px;font-weight:700;margin:2px 0;}.sd{font-size:9px;}
 .co{background:var(--gl);border:1px solid #9fe1cb;border-radius:7px;padding:8px 11px;font-size:11px;color:var(--gn);line-height:1.55;}
 .co b{font-weight:700;}
-.dl{display:flex;flex-wrap:wrap;gap:9px;}
-.di{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--mu);}
-.ds{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
-.rg-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}
-.rg-card{border-radius:8px;padding:9px 11px;border:2px solid transparent;cursor:pointer;transition:border-color .15s,transform .12s;}
-.rg-card:hover{transform:translateY(-2px);}
-.rg-card.sel{border-color:var(--gm)!important;}
-.rg-name{font-size:10px;color:var(--mu);margin-bottom:3px;}
-.rg-vol{font-size:15px;font-weight:700;}
-.rg-pcr{font-size:10px;margin-top:2px;}
 @media(max-width:720px){.grid2{grid-template-columns:1fr;}.kpis{grid-template-columns:repeat(2,1fr);}.rg-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
@@ -85,43 +96,23 @@ select:focus{border-color:var(--gm);}
 
 <!-- KPI STRIP -->
 <div class="kpis">
-  <div class="kpi n" id="kpi-vol">
-    <div class="kpi-lbl" id="kpi-vol-lbl">Total tracked volume (2024)</div>
-    <div class="kpi-val" id="kpi-vol-val">9,388kt</div>
-    <div class="kpi-sub" id="kpi-vol-sub" style="color:var(--mu)">metric tonnes</div>
-  </div>
-  <div class="kpi g" id="kpi-sig">
-    <div class="kpi-lbl" id="kpi-sig-lbl">Signatory virgin plastic Δ</div>
-    <div class="kpi-val" id="kpi-sig-val">−6%</div>
-    <div class="kpi-sub" id="kpi-sig-sub">vs global market +13%</div>
-  </div>
-  <div class="kpi b" id="kpi-pcr">
-    <div class="kpi-lbl" id="kpi-pcr-lbl">PCR content (2024 avg)</div>
-    <div class="kpi-val" id="kpi-pcr-val">16%</div>
-    <div class="kpi-sub" id="kpi-pcr-sub">up from 5% in 2018 (3×)</div>
-  </div>
-  <div class="kpi r" id="kpi-reu">
-    <div class="kpi-lbl" id="kpi-reu-lbl">Reusable packaging (2024)</div>
-    <div class="kpi-val" id="kpi-reu-val">1.2%</div>
-    <div class="kpi-sub" id="kpi-reu-sub">target: 100% by 2025</div>
-  </div>
+  <div class="kpi n" id="kpi-vol"><div class="kpi-lbl" id="kpi-vol-lbl">Total tracked volume (2024)</div><div class="kpi-val" id="kpi-vol-val">9,388kt</div><div class="kpi-sub" id="kpi-vol-sub" style="color:var(--mu)">metric tonnes</div></div>
+  <div class="kpi g" id="kpi-sig"><div class="kpi-lbl" id="kpi-sig-lbl">Signatory virgin plastic Δ</div><div class="kpi-val" id="kpi-sig-val">−6%</div><div class="kpi-sub" id="kpi-sig-sub">vs global market +13%</div></div>
+  <div class="kpi b" id="kpi-pcr"><div class="kpi-lbl" id="kpi-pcr-lbl">PCR content (2024 avg)</div><div class="kpi-val" id="kpi-pcr-val">16%</div><div class="kpi-sub" id="kpi-pcr-sub">up from 5% in 2018 (3×)</div></div>
+  <div class="kpi r" id="kpi-reu"><div class="kpi-lbl" id="kpi-reu-lbl">Reusable packaging (2024)</div><div class="kpi-val" id="kpi-reu-val">1.2%</div><div class="kpi-sub" id="kpi-reu-sub">target: 100% by 2025</div></div>
 </div>
 
 <!-- CONTEXT BAR -->
 <div class="ctx-bar" id="ctx-bar">
-  <span id="ctx-icon">📍</span>
-  <span id="ctx-text"><b>Industry-wide</b></span>
+  <span id="ctx-icon">📍</span><span id="ctx-text"><b>Industry-wide</b></span>
   <button class="ctx-reset" onclick="resetKPIs()">× Reset to industry view</button>
 </div>
 
-<!-- PANEL 1 FULL: Volume Explorer -->
+<!-- PANEL 1: Volume Explorer -->
 <div class="panel" style="margin-bottom:.9rem;">
   <div class="ph">
-    <div><p class="pt">Panel 1 · Company volume explorer</p><p class="pd">Filter by sector or region · sort · click a bar to see that company's KPIs above and load it in the scorecard.</p></div>
-    <div class="vtog" id="sort-tog">
-      <button class="vb a" onclick="setSort('vol',this)">Vol ↓</button>
-      <button class="vb" onclick="setSort('az',this)">A–Z</button>
-    </div>
+    <div><p class="pt">Panel 1 · Company volume explorer</p><p class="pd">Filter by sector or region below. Sort by volume or name. <b>Click any bar</b> to update the KPIs above and load that company in the scorecard.</p></div>
+    <div class="vtog" id="sort-tog"><button class="vb a" onclick="setSort('vol',this)">Vol ↓</button><button class="vb" onclick="setSort('az',this)">A–Z</button></div>
   </div>
   <div class="cr" id="sf"></div>
   <div class="cr" id="rf"></div>
@@ -131,9 +122,10 @@ select:focus{border-color:var(--gm);}
 
 <!-- PANELS 2 + 3 -->
 <div class="grid2">
-  <!-- PANEL 2: Trend -->
+
+  <!-- PANEL 2: Trend + Metric Cards -->
   <div class="panel">
-    <div class="ph"><div><p class="pt">Panel 2 · Trend explorer</p><p class="pd">Granularity: daily / weekly / monthly / quarterly / yearly. Toggle metrics. Animate to reveal data progressively.</p></div></div>
+    <div class="ph"><div><p class="pt">Panel 2 · Trend explorer</p><p class="pd">Switch granularity and toggle metrics. <b>Click each metric card below</b> to see what it means and why it matters.</p></div></div>
     <div class="cr">
       <span style="font-size:10px;color:var(--mu);">Granularity:</span>
       <button class="btn" onclick="setGran('daily',this)">Daily</button>
@@ -144,47 +136,89 @@ select:focus{border-color:var(--gm);}
     </div>
     <div class="cr" id="yr-row" style="display:none;">
       <span style="font-size:10px;color:var(--mu);">Year:</span>
-      <select id="yr-sel" onchange="buildTrendChart()">
-        <option>2018</option><option>2019</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option selected>2024</option>
-      </select>
+      <select id="yr-sel" onchange="buildTrendChart()"><option>2018</option><option>2019</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option selected>2024</option></select>
     </div>
     <div class="cr">
-      <button class="btn a" id="tog-pcr" onclick="togMet('pcr',this)" style="border-color:#1D9E75;background:#1D9E75;color:#fff;">● PCR %</button>
-      <button class="btn a" id="tog-vol" onclick="togMet('vol',this)" style="border-color:#2a78d6;background:#2a78d6;color:#fff;">● Volume</button>
-      <button class="btn a" id="tog-sig" onclick="togMet('sig',this)" style="border-color:#0f6e56;background:#0f6e56;color:#fff;">● Sig Δ</button>
-      <button class="btn a" id="tog-mkt" onclick="togMet('mkt',this)" style="border-color:#D85A30;background:#D85A30;color:#fff;">● Mkt Δ</button>
+      <button class="btn a" onclick="togMet('pcr',this)" style="border-color:#1D9E75;background:#1D9E75;color:#fff;">● PCR %</button>
+      <button class="btn a" onclick="togMet('vol',this)" style="border-color:#2a78d6;background:#2a78d6;color:#fff;">● Volume</button>
+      <button class="btn a" onclick="togMet('sig',this)" style="border-color:#0f6e56;background:#0f6e56;color:#fff;">● Sig Δ</button>
+      <button class="btn a" onclick="togMet('mkt',this)" style="border-color:#D85A30;background:#D85A30;color:#fff;">● Mkt Δ</button>
     </div>
-    <div class="cr">
-      <button class="btn" onclick="animTrend()">▶ Animate</button>
-      <button class="btn" onclick="buildTrendChart()">↺ Reset</button>
+    <div class="cr"><button class="btn" onclick="animTrend()">▶ Animate</button><button class="btn" onclick="buildTrendChart()">↺ Reset</button></div>
+    <div class="cw" style="height:175px;"><canvas id="trend-chart"></canvas></div>
+
+    <!-- METRIC CARDS — click to expand explanation -->
+    <p style="font-size:10px;color:var(--mu);font-weight:600;margin-top:4px;">↓ Click each metric to understand what it measures</p>
+
+    <div class="metric-card" onclick="toggleMC(this,'rrc')">
+      <div class="mc-top">
+        <span class="mc-name">📦 RRC packaging design</span>
+        <span class="mc-val" style="color:var(--gn);">72% <span style="color:var(--mu);font-weight:400;">/ 100% target</span></span>
+        <span class="mc-toggle">▼ What does this mean?</span>
+      </div>
+      <div class="mc-hint">+10pp vs 2018 · 28 percentage points still to go</div>
+      <div class="track"><div class="bf" id="br1" style="background:#1D9E75;"></div></div>
+      <div class="mc-expand" id="exp-rrc">
+        <p class="mc-def"><b>RRC = Reusable, Recyclable, or Compostable.</b> This measures what percentage of a company's packaging is <em>designed</em> to be recycled, reused, or composted — based on the packaging material and format, not on whether it actually gets recycled.</p>
+        <p class="mc-why">⚠️ A bottle can be "designed for recycling" but still end up in landfill if no recycling facility exists. This metric shows design intent, not real-world circular outcomes. The 2025 target is <b>100%</b> for every signatory — the current 72% means 28% of packaging is still designed in a way that cannot be recovered.</p>
+      </div>
     </div>
-    <div class="cw" style="height:200px;"><canvas id="trend-chart"></canvas></div>
-    <div class="prog-list">
-      <div class="pr"><div class="prh"><span class="prn">RRC packaging design</span><span class="prv" style="color:var(--gn);">72% / 100%</span></div><div class="track"><div class="bf" id="br1" style="background:#1D9E75;"></div></div><span class="prnote">+10pp vs 2018 · 28pp gap to 2025 target</span></div>
-      <div class="pr"><div class="prh"><span class="prn">Packaging eliminated since 2019</span><span class="prv" style="color:var(--bl);">775k tonnes</span></div><div class="track"><div class="bf" id="br2" style="background:#2a78d6;"></div></div><span class="prnote">180,000t eliminated in 2024 alone</span></div>
-      <div class="pr"><div class="prh"><span class="prn">Reusable packaging (2024)</span><span class="prv" style="color:var(--rd);">1.2% / 100%</span></div><div class="track"><div class="bf" id="br3" style="background:#D85A30;min-width:3px;"></div></div><span class="prnote">Critical laggard — systemic change barely begun</span></div>
+
+    <div class="metric-card" onclick="toggleMC(this,'elim')">
+      <div class="mc-top">
+        <span class="mc-name">🗑️ Packaging eliminated since 2019</span>
+        <span class="mc-val" style="color:var(--bl);">775,000 tonnes</span>
+        <span class="mc-toggle">▼ What does this mean?</span>
+      </div>
+      <div class="mc-hint">180,000 tonnes removed in 2024 alone — cumulative from 2019</div>
+      <div class="track"><div class="bf" id="br2" style="background:#2a78d6;width:0;"></div></div>
+      <div class="mc-expand" id="exp-elim">
+        <p class="mc-def"><b>Packaging elimination</b> means completely removing plastic packaging that was previously used — for example, removing a plastic overwrap from a product, replacing a plastic bottle with a refillable format, or switching to no packaging at all.</p>
+        <p class="mc-why">✅ This is the most meaningful circular economy action: not recycling packaging after use, but never creating the plastic waste in the first place. 775,000 tonnes eliminated is roughly equivalent to <b>55 billion standard plastic bottles</b> that were never produced.</p>
+      </div>
+    </div>
+
+    <div class="metric-card" onclick="toggleMC(this,'reuse')">
+      <div class="mc-top">
+        <span class="mc-name">♻️ Reusable packaging (2024)</span>
+        <span class="mc-val" style="color:var(--rd);">1.2% <span style="color:var(--mu);font-weight:400;">/ 100% ambition</span></span>
+        <span class="mc-toggle">▼ What does this mean?</span>
+      </div>
+      <div class="mc-hint">Almost no progress — the most lagging metric across all signatories</div>
+      <div class="track"><div class="bf" id="br3" style="background:#D85A30;min-width:4px;"></div></div>
+      <div class="mc-expand" id="exp-reuse">
+        <p class="mc-def"><b>Reusable packaging</b> means packaging designed to be used <em>multiple times</em> before being recycled or discarded — like glass milk bottles returned to a dairy, or a refillable shampoo container at a dispensing station.</p>
+        <p class="mc-why">🚨 This is different from <em>recyclable</em>. A single-use plastic bottle can be 100% recyclable but it is still used only once. True reuse requires changing the whole supply chain (collection, cleaning, redistribution). At 1.2%, signatories have barely started this transformation despite a 100% long-term ambition. This is the biggest gap between commitment and action.</p>
+      </div>
     </div>
   </div>
 
-  <!-- PANEL 3: Regional -->
+  <!-- PANEL 3: Regional Breakdown -->
   <div class="panel">
-    <div class="ph"><div><p class="pt">Panel 3 · Regional breakdown</p><p class="pd">Click a region card to filter the entire dashboard — KPIs, Panel 1, and scorecard will update to show only that region's data.</p></div></div>
+    <div class="ph"><div>
+      <p class="pt">Panel 3 · Regional breakdown</p>
+      <p class="pd"><b>Click a region card</b> to filter the entire dashboard — KPIs, Panel 1 bars, and the scorecard will all update to show only that region's data. Click again to deselect.</p>
+    </div></div>
+
+    <div style="background:#fef9ec;border:1px solid #fac775;border-radius:7px;padding:7px 10px;font-size:10px;color:var(--am);">
+      👆 <b>Tip:</b> Click any region card below to filter all panels to that region. The KPIs at the top will update instantly.
+    </div>
+
     <div class="rg-grid" id="rg-cards"></div>
-    <div class="cw" style="height:170px;"><canvas id="rg-chart"></canvas></div>
-    <div class="co" style="font-size:10px;line-height:1.5;">
-      <b>Europe leads on PCR (18.2%).</b> North America carries the largest volume (3,185kt) driven by Coca-Cola and PepsiCo's US footprint. Click any region card above to filter all panels to that region.
+    <div class="cw" style="height:175px;"><canvas id="rg-chart"></canvas></div>
+
+    <div style="background:var(--sur2);border:1px solid var(--br);border-radius:7px;padding:9px 11px;font-size:11px;line-height:1.6;">
+      <b style="color:var(--txt);">How to read this panel:</b><br>
+      <span style="color:var(--mu);">Bars (left axis) = total plastic packaging volume by region in thousand metric tonnes. Line + dots (right axis) = weighted-average PCR content % for companies operating in that region. <b>Europe</b> leads on PCR (18.2%). <b>North America</b> holds the most volume (3,185kt) driven by Coca-Cola and PepsiCo's US operations.</span>
     </div>
   </div>
 </div>
 
-<!-- PANEL 4 FULL: Scorecard -->
+<!-- PANEL 4: Scorecard -->
 <div class="panel" style="margin-bottom:.9rem;">
   <div class="ph">
-    <div><p class="pt">Panel 4 · Company scorecard</p><p class="pd">Select a company — KPIs above update instantly to that company's metrics. Enable Compare mode to overlay two companies. Switch Bar / Radar view.</p></div>
-    <div class="vtog">
-      <button class="vb a" onclick="setVM('bar',this)">Bar</button>
-      <button class="vb" onclick="setVM('radar',this)">Radar</button>
-    </div>
+    <div><p class="pt">Panel 4 · Company scorecard</p><p class="pd">Select a company — KPIs above update instantly. Use Compare mode to overlay two companies. Switch Bar (2018 vs 2024) or Radar (performance score across 4 dimensions).</p></div>
+    <div class="vtog"><button class="vb a" onclick="setVM('bar',this)">Bar</button><button class="vb" onclick="setVM('radar',this)">Radar</button></div>
   </div>
   <div class="cr">
     <span style="font-size:10px;color:var(--mu);">Company A:</span>
@@ -202,177 +236,113 @@ select:focus{border-color:var(--gm);}
   <div id="sc-co" class="co"></div>
 </div>
 
-</div><!-- end page -->
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 const DATA = {"companies":[{"id":"coca-cola","name":"Coca-Cola","sector":"Beverages","kt24":3606,"rrc18":99,"rrc24":100,"pcr18":9,"pcr24":18,"vchg":10,"reuse24":1.1,"color":"#2a78d6","mix":{"NA":35,"EU":22,"APAC":25,"LATAM":12,"MENA":6},"region_vols":{"NA":1262.0,"EU":793.0,"APAC":902.0,"LATAM":433.0,"MENA":216.0}},{"id":"pepsico","name":"PepsiCo","sector":"Food & Bev.","kt24":2095,"rrc18":77,"rrc24":78,"pcr18":3,"pcr24":11,"vchg":-5,"reuse24":0,"color":"#3d8c40","mix":{"NA":55,"EU":18,"APAC":15,"LATAM":8,"MENA":4},"region_vols":{"NA":1152.0,"EU":377.0,"APAC":314.0,"LATAM":168.0,"MENA":84.0}},{"id":"nestle","name":"Nestl\u00e9","sector":"Food","kt24":873,"rrc18":65,"rrc24":82,"pcr18":2,"pcr24":30,"vchg":-21,"reuse24":0.8,"color":"#1baf7a","mix":{"NA":20,"EU":32,"APAC":30,"LATAM":12,"MENA":6},"region_vols":{"NA":175.0,"EU":279.0,"APAC":262.0,"LATAM":105.0,"MENA":52.0}},{"id":"danone","name":"Danone","sector":"Food","kt24":670,"rrc18":76,"rrc24":76,"pcr18":7,"pcr24":17,"vchg":-17,"reuse24":4,"color":"#0f6e56","mix":{"NA":15,"EU":40,"APAC":22,"LATAM":15,"MENA":8},"region_vols":{"NA":100.0,"EU":268.0,"APAC":147.0,"LATAM":100.0,"MENA":54.0}},{"id":"unilever","name":"Unilever","sector":"HPC","kt24":655,"rrc18":50,"rrc24":65,"pcr18":1,"pcr24":21,"vchg":-23,"reuse24":0.1,"color":"#D85A30","mix":{"NA":15,"EU":28,"APAC":32,"LATAM":15,"MENA":10},"region_vols":{"NA":98.0,"EU":183.0,"APAC":210.0,"LATAM":98.0,"MENA":66.0}},{"id":"henkel","name":"Henkel","sector":"HPC","kt24":269,"rrc18":75,"rrc24":80,"pcr18":8,"pcr24":15,"vchg":-18,"reuse24":0,"color":"#e8a020","mix":{"NA":20,"EU":45,"APAC":20,"LATAM":10,"MENA":5},"region_vols":{"NA":54.0,"EU":121.0,"APAC":54.0,"LATAM":27.0,"MENA":13.0}},{"id":"colgate","name":"Colgate-P.","sector":"HPC","kt24":246,"rrc18":57,"rrc24":76,"pcr18":6,"pcr24":21,"vchg":-27,"reuse24":0.9,"color":"#c23b8e","mix":{"NA":25,"EU":22,"APAC":28,"LATAM":18,"MENA":7},"region_vols":{"NA":62.0,"EU":54.0,"APAC":69.0,"LATAM":44.0,"MENA":17.0}},{"id":"mars","name":"Mars","sector":"Food","kt24":215,"rrc18":19,"rrc24":45,"pcr18":0,"pcr24":7,"vchg":1,"reuse24":0,"color":"#eda100","mix":{"NA":35,"EU":30,"APAC":20,"LATAM":10,"MENA":5},"region_vols":{"NA":75.0,"EU":64.0,"APAC":43.0,"LATAM":22.0,"MENA":11.0}},{"id":"mondelez","name":"Mondel\u0113z","sector":"Food","kt24":178,"rrc18":65,"rrc24":70,"pcr18":3,"pcr24":12,"vchg":-8,"reuse24":0,"color":"#4a3aa7","mix":{"NA":30,"EU":35,"APAC":20,"LATAM":10,"MENA":5},"region_vols":{"NA":53.0,"EU":62.0,"APAC":36.0,"LATAM":18.0,"MENA":9.0}},{"id":"reckitt","name":"Reckitt","sector":"HPC","kt24":177,"rrc18":60,"rrc24":72,"pcr18":5,"pcr24":18,"vchg":-15,"reuse24":0,"color":"#2a78d6","mix":{"NA":25,"EU":35,"APAC":25,"LATAM":10,"MENA":5},"region_vols":{"NA":44.0,"EU":62.0,"APAC":44.0,"LATAM":18.0,"MENA":9.0}},{"id":"loreal","name":"L'Or\u00e9al","sector":"Cosmetics","kt24":152,"rrc18":49,"rrc24":49,"pcr18":5,"pcr24":37,"vchg":-21,"reuse24":6,"color":"#7c3aed","mix":{"NA":20,"EU":38,"APAC":30,"LATAM":8,"MENA":4},"region_vols":{"NA":30.0,"EU":58.0,"APAC":46.0,"LATAM":12.0,"MENA":6.0}},{"id":"sc-johnson","name":"SC Johnson","sector":"HPC","kt24":67,"rrc18":49,"rrc24":64,"pcr18":5,"pcr24":25,"vchg":-33,"reuse24":10,"color":"#0f6e56","mix":{"NA":40,"EU":28,"APAC":18,"LATAM":10,"MENA":4},"region_vols":{"NA":27.0,"EU":19.0,"APAC":12.0,"LATAM":7.0,"MENA":3.0}},{"id":"kellanova","name":"Kellanova","sector":"Food","kt24":49,"rrc18":60,"rrc24":68,"pcr18":3,"pcr24":10,"vchg":-3,"reuse24":0,"color":"#1baf7a","mix":{"NA":50,"EU":25,"APAC":15,"LATAM":7,"MENA":3},"region_vols":{"NA":24.0,"EU":12.0,"APAC":7.0,"LATAM":3.0,"MENA":1.0}},{"id":"friesland","name":"FrieslandC.","sector":"Food","kt24":47,"rrc18":52,"rrc24":55,"pcr18":4,"pcr24":8,"vchg":-5,"reuse24":0,"color":"#e8a020","mix":{"NA":10,"EU":55,"APAC":25,"LATAM":7,"MENA":3},"region_vols":{"NA":5.0,"EU":26.0,"APAC":12.0,"LATAM":3.0,"MENA":1.0}},{"id":"diageo","name":"Diageo","sector":"Beverages","kt24":45,"rrc18":80,"rrc24":85,"pcr18":12,"pcr24":22,"vchg":-12,"reuse24":2,"color":"#185fa5","mix":{"NA":30,"EU":32,"APAC":20,"LATAM":10,"MENA":8},"region_vols":{"NA":14.0,"EU":14.0,"APAC":9.0,"LATAM":4.0,"MENA":4.0}},{"id":"essity","name":"Essity","sector":"HPC","kt24":44,"rrc18":68,"rrc24":74,"pcr18":9,"pcr24":14,"vchg":-8,"reuse24":0,"color":"#D85A30","mix":{"NA":20,"EU":50,"APAC":15,"LATAM":10,"MENA":5},"region_vols":{"NA":9.0,"EU":22.0,"APAC":7.0,"LATAM":4.0,"MENA":2.0}}],"yearly":[{"year":2018,"pcr":5.0,"rrc":62.0,"mkt":0.0,"sig":0.0,"reuse":0.3,"vol_kt":9670.0},{"year":2019,"pcr":6.8,"rrc":63.5,"mkt":2.2,"sig":-1.0,"reuse":0.4,"vol_kt":9671.0},{"year":2020,"pcr":8.7,"rrc":65.2,"mkt":4.3,"sig":-2.2,"reuse":0.6,"vol_kt":9622.0},{"year":2021,"pcr":10.4,"rrc":66.8,"mkt":6.7,"sig":-3.2,"reuse":0.7,"vol_kt":9554.0},{"year":2022,"pcr":12.3,"rrc":68.4,"mkt":8.9,"sig":-4.0,"reuse":0.9,"vol_kt":9470.0},{"year":2023,"pcr":14.0,"rrc":70.0,"mkt":11.0,"sig":-5.0,"reuse":1.0,"vol_kt":9458.0},{"year":2024,"pcr":16.0,"rrc":72.0,"mkt":13.0,"sig":-6.0,"reuse":1.2,"vol_kt":9382.0}],"quarterly":[{"label":"Q1 2018","year":2018,"q":1,"pcr":4.7,"vol_kt":2258.0,"sig":0.1,"mkt":0.1},{"label":"Q2 2018","year":2018,"q":2,"pcr":5.1,"vol_kt":2351.0,"sig":-0.1,"mkt":-0.1},{"label":"Q3 2018","year":2018,"q":3,"pcr":5.1,"vol_kt":2544.0,"sig":-0.0,"mkt":0.5},{"label":"Q4 2018","year":2018,"q":4,"pcr":5.1,"vol_kt":2525.0,"sig":0.1,"mkt":0.3},{"label":"Q1 2019","year":2019,"q":1,"pcr":6.4,"vol_kt":2259.0,"sig":-0.8,"mkt":2.2},{"label":"Q2 2019","year":2019,"q":2,"pcr":6.6,"vol_kt":2339.0,"sig":-0.9,"mkt":1.9},{"label":"Q3 2019","year":2019,"q":3,"pcr":7.1,"vol_kt":2542.0,"sig":-1.0,"mkt":2.3},{"label":"Q4 2019","year":2019,"q":4,"pcr":7.1,"vol_kt":2566.0,"sig":-0.9,"mkt":2.1},{"label":"Q1 2020","year":2020,"q":1,"pcr":8.0,"vol_kt":2227.0,"sig":-2.1,"mkt":4.2},{"label":"Q2 2020","year":2020,"q":2,"pcr":8.7,"vol_kt":2342.0,"sig":-2.3,"mkt":4.2},{"label":"Q3 2020","year":2020,"q":3,"pcr":8.8,"vol_kt":2513.0,"sig":-2.3,"mkt":4.4},{"label":"Q4 2020","year":2020,"q":4,"pcr":9.1,"vol_kt":2526.0,"sig":-2.2,"mkt":4.3},{"label":"Q1 2021","year":2021,"q":1,"pcr":9.8,"vol_kt":2232.0,"sig":-3.2,"mkt":6.5},{"label":"Q2 2021","year":2021,"q":2,"pcr":10.5,"vol_kt":2321.0,"sig":-3.0,"mkt":6.7},{"label":"Q3 2021","year":2021,"q":3,"pcr":11.1,"vol_kt":2504.0,"sig":-3.0,"mkt":6.7},{"label":"Q4 2021","year":2021,"q":4,"pcr":10.7,"vol_kt":2494.0,"sig":-3.2,"mkt":7.0},{"label":"Q1 2022","year":2022,"q":1,"pcr":11.5,"vol_kt":2210.0,"sig":-4.4,"mkt":9.0},{"label":"Q2 2022","year":2022,"q":2,"pcr":12.4,"vol_kt":2290.0,"sig":-4.1,"mkt":8.9},{"label":"Q3 2022","year":2022,"q":3,"pcr":13.0,"vol_kt":2473.0,"sig":-4.1,"mkt":9.2},{"label":"Q4 2022","year":2022,"q":4,"pcr":12.6,"vol_kt":2482.0,"sig":-4.0,"mkt":8.7},{"label":"Q1 2023","year":2023,"q":1,"pcr":13.0,"vol_kt":2184.0,"sig":-4.9,"mkt":11.0},{"label":"Q2 2023","year":2023,"q":2,"pcr":14.3,"vol_kt":2297.0,"sig":-4.8,"mkt":10.7},{"label":"Q3 2023","year":2023,"q":3,"pcr":14.5,"vol_kt":2487.0,"sig":-4.7,"mkt":10.7},{"label":"Q4 2023","year":2023,"q":4,"pcr":14.5,"vol_kt":2490.0,"sig":-4.8,"mkt":11.1},{"label":"Q1 2024","year":2024,"q":1,"pcr":14.9,"vol_kt":2175.0,"sig":-6.2,"mkt":13.0},{"label":"Q2 2024","year":2024,"q":2,"pcr":16.0,"vol_kt":2299.0,"sig":-6.1,"mkt":13.1},{"label":"Q3 2024","year":2024,"q":3,"pcr":16.5,"vol_kt":2458.0,"sig":-6.0,"mkt":13.2},{"label":"Q4 2024","year":2024,"q":4,"pcr":16.7,"vol_kt":2462.0,"sig":-6.2,"mkt":13.1}],"monthly":[{"label":"Jan 2018","year":2018,"month":1,"mo_name":"Jan","pcr":4.6,"vol_kt":680.0,"sig":-0.1,"mkt":0.2},{"label":"Feb 2018","year":2018,"month":2,"mo_name":"Feb","pcr":4.6,"vol_kt":665.0,"sig":0.2,"mkt":0.1},{"label":"Mar 2018","year":2018,"month":3,"mo_name":"Mar","pcr":4.8,"vol_kt":738.0,"sig":0.0,"mkt":-0.0},{"label":"Apr 2018","year":2018,"month":4,"mo_name":"Apr","pcr":4.9,"vol_kt":774.0,"sig":0.0,"mkt":0.1},{"label":"May 2018","year":2018,"month":5,"mo_name":"May","pcr":5.1,"vol_kt":819.0,"sig":-0.2,"mkt":0.0},{"label":"Jun 2018","year":2018,"month":6,"mo_name":"Jun","pcr":5.2,"vol_kt":891.0,"sig":0.1,"mkt":0.1},{"label":"Jul 2018","year":2018,"month":7,"mo_name":"Jul","pcr":5.2,"vol_kt":930.0,"sig":-0.0,"mkt":-0.2},{"label":"Aug 2018","year":2018,"month":8,"mo_name":"Aug","pcr":5.3,"vol_kt":902.0,"sig":-0.1,"mkt":0.1},{"label":"Sep 2018","year":2018,"month":9,"mo_name":"Sep","pcr":5.1,"vol_kt":835.0,"sig":0.0,"mkt":0.2},{"label":"Oct 2018","year":2018,"month":10,"mo_name":"Oct","pcr":4.9,"vol_kt":873.0,"sig":0.0,"mkt":0.3},{"label":"Nov 2018","year":2018,"month":11,"mo_name":"Nov","pcr":4.7,"vol_kt":874.0,"sig":-0.0,"mkt":-0.0},{"label":"Dec 2018","year":2018,"month":12,"mo_name":"Dec","pcr":4.9,"vol_kt":757.0,"sig":0.3,"mkt":-0.1},{"label":"Jan 2019","year":2019,"month":1,"mo_name":"Jan","pcr":6.2,"vol_kt":674.0,"sig":-1.1,"mkt":2.2},{"label":"Feb 2019","year":2019,"month":2,"mo_name":"Feb","pcr":6.2,"vol_kt":662.0,"sig":-1.3,"mkt":2.5},{"label":"Mar 2019","year":2019,"month":3,"mo_name":"Mar","pcr":6.4,"vol_kt":736.0,"sig":-1.1,"mkt":2.2},{"label":"Apr 2019","year":2019,"month":4,"mo_name":"Apr","pcr":6.9,"vol_kt":760.0,"sig":-1.2,"mkt":2.1},{"label":"May 2019","year":2019,"month":5,"mo_name":"May","pcr":6.8,"vol_kt":826.0,"sig":-0.8,"mkt":2.2},{"label":"Jun 2019","year":2019,"month":6,"mo_name":"Jun","pcr":6.8,"vol_kt":892.0,"sig":-0.9,"mkt":2.3},{"label":"Jul 2019","year":2019,"month":7,"mo_name":"Jul","pcr":7.0,"vol_kt":927.0,"sig":-0.8,"mkt":2.5},{"label":"Aug 2019","year":2019,"month":8,"mo_name":"Aug","pcr":7.2,"vol_kt":904.0,"sig":-1.1,"mkt":2.1},{"label":"Sep 2019","year":2019,"month":9,"mo_name":"Sep","pcr":6.9,"vol_kt":841.0,"sig":-0.9,"mkt":2.1},{"label":"Oct 2019","year":2019,"month":10,"mo_name":"Oct","pcr":6.7,"vol_kt":866.0,"sig":-1.1,"mkt":2.3},{"label":"Nov 2019","year":2019,"month":11,"mo_name":"Nov","pcr":6.4,"vol_kt":868.0,"sig":-0.9,"mkt":2.4},{"label":"Dec 2019","year":2019,"month":12,"mo_name":"Dec","pcr":6.5,"vol_kt":764.0,"sig":-1.0,"mkt":2.1},{"label":"Jan 2020","year":2020,"month":1,"mo_name":"Jan","pcr":7.8,"vol_kt":683.0,"sig":-2.1,"mkt":4.4},{"label":"Feb 2020","year":2020,"month":2,"mo_name":"Feb","pcr":8.3,"vol_kt":657.0,"sig":-2.1,"mkt":4.3},{"label":"Mar 2020","year":2020,"month":3,"mo_name":"Mar","pcr":8.2,"vol_kt":736.0,"sig":-2.0,"mkt":4.1},{"label":"Apr 2020","year":2020,"month":4,"mo_name":"Apr","pcr":8.4,"vol_kt":764.0,"sig":-2.1,"mkt":4.1},{"label":"May 2020","year":2020,"month":5,"mo_name":"May","pcr":8.5,"vol_kt":806.0,"sig":-2.2,"mkt":4.3},{"label":"Jun 2020","year":2020,"month":6,"mo_name":"Jun","pcr":9.0,"vol_kt":885.0,"sig":-2.3,"mkt":4.0},{"label":"Jul 2020","year":2020,"month":7,"mo_name":"Jul","pcr":9.3,"vol_kt":924.0,"sig":-2.1,"mkt":4.4},{"label":"Aug 2020","year":2020,"month":8,"mo_name":"Aug","pcr":9.1,"vol_kt":906.0,"sig":-2.2,"mkt":4.2},{"label":"Sep 2020","year":2020,"month":9,"mo_name":"Sep","pcr":8.8,"vol_kt":830.0,"sig":-2.5,"mkt":4.3},{"label":"Oct 2020","year":2020,"month":10,"mo_name":"Oct","pcr":8.7,"vol_kt":864.0,"sig":-2.3,"mkt":4.4},{"label":"Nov 2020","year":2020,"month":11,"mo_name":"Nov","pcr":8.6,"vol_kt":866.0,"sig":-2.3,"mkt":4.2},{"label":"Dec 2020","year":2020,"month":12,"mo_name":"Dec","pcr":8.3,"vol_kt":746.0,"sig":-2.2,"mkt":4.3},{"label":"Jan 2021","year":2021,"month":1,"mo_name":"Jan","pcr":9.6,"vol_kt":674.0,"sig":-3.1,"mkt":6.6},{"label":"Feb 2021","year":2021,"month":2,"mo_name":"Feb","pcr":9.6,"vol_kt":646.0,"sig":-3.2,"mkt":6.8},{"label":"Mar 2021","year":2021,"month":3,"mo_name":"Mar","pcr":9.8,"vol_kt":729.0,"sig":-3.1,"mkt":6.4},{"label":"Apr 2021","year":2021,"month":4,"mo_name":"Apr","pcr":10.1,"vol_kt":754.0,"sig":-3.2,"mkt":6.8},{"label":"May 2021","year":2021,"month":5,"mo_name":"May","pcr":10.4,"vol_kt":800.0,"sig":-3.3,"mkt":6.8},{"label":"Jun 2021","year":2021,"month":6,"mo_name":"Jun","pcr":10.8,"vol_kt":895.0,"sig":-3.0,"mkt":6.4},{"label":"Jul 2021","year":2021,"month":7,"mo_name":"Jul","pcr":11.1,"vol_kt":904.0,"sig":-3.0,"mkt":6.7},{"label":"Aug 2021","year":2021,"month":8,"mo_name":"Aug","pcr":10.8,"vol_kt":904.0,"sig":-3.1,"mkt":6.4},{"label":"Sep 2021","year":2021,"month":9,"mo_name":"Sep","pcr":10.6,"vol_kt":824.0,"sig":-3.2,"mkt":6.6},{"label":"Oct 2021","year":2021,"month":10,"mo_name":"Oct","pcr":10.5,"vol_kt":851.0,"sig":-3.2,"mkt":7.0},{"label":"Nov 2021","year":2021,"month":11,"mo_name":"Nov","pcr":10.0,"vol_kt":861.0,"sig":-3.2,"mkt":6.6},{"label":"Dec 2021","year":2021,"month":12,"mo_name":"Dec","pcr":9.9,"vol_kt":749.0,"sig":-3.3,"mkt":7.0},{"label":"Jan 2022","year":2022,"month":1,"mo_name":"Jan","pcr":11.3,"vol_kt":662.0,"sig":-4.1,"mkt":8.8},{"label":"Feb 2022","year":2022,"month":2,"mo_name":"Feb","pcr":11.4,"vol_kt":646.0,"sig":-3.9,"mkt":8.9},{"label":"Mar 2022","year":2022,"month":3,"mo_name":"Mar","pcr":11.7,"vol_kt":710.0,"sig":-3.9,"mkt":8.9},{"label":"Apr 2022","year":2022,"month":4,"mo_name":"Apr","pcr":12.0,"vol_kt":754.0,"sig":-4.0,"mkt":8.8},{"label":"May 2022","year":2022,"month":5,"mo_name":"May","pcr":12.2,"vol_kt":801.0,"sig":-4.1,"mkt":9.0},{"label":"Jun 2022","year":2022,"month":6,"mo_name":"Jun","pcr":12.7,"vol_kt":885.0,"sig":-3.7,"mkt":8.9},{"label":"Jul 2022","year":2022,"month":7,"mo_name":"Jul","pcr":12.9,"vol_kt":905.0,"sig":-4.0,"mkt":8.7},{"label":"Aug 2022","year":2022,"month":8,"mo_name":"Aug","pcr":12.9,"vol_kt":886.0,"sig":-4.1,"mkt":8.8},{"label":"Sep 2022","year":2022,"month":9,"mo_name":"Sep","pcr":12.5,"vol_kt":831.0,"sig":-4.0,"mkt":8.8},{"label":"Oct 2022","year":2022,"month":10,"mo_name":"Oct","pcr":12.3,"vol_kt":858.0,"sig":-4.1,"mkt":9.0},{"label":"Nov 2022","year":2022,"month":11,"mo_name":"Nov","pcr":12.0,"vol_kt":857.0,"sig":-3.8,"mkt":8.8},{"label":"Dec 2022","year":2022,"month":12,"mo_name":"Dec","pcr":11.8,"vol_kt":737.0,"sig":-4.0,"mkt":9.1},{"label":"Jan 2023","year":2023,"month":1,"mo_name":"Jan","pcr":12.8,"vol_kt":662.0,"sig":-5.1,"mkt":11.1},{"label":"Feb 2023","year":2023,"month":2,"mo_name":"Feb","pcr":12.8,"vol_kt":641.0,"sig":-5.1,"mkt":11.0},{"label":"Mar 2023","year":2023,"month":3,"mo_name":"Mar","pcr":13.1,"vol_kt":712.0,"sig":-5.0,"mkt":10.9},{"label":"Apr 2023","year":2023,"month":4,"mo_name":"Apr","pcr":13.7,"vol_kt":752.0,"sig":-5.1,"mkt":10.9},{"label":"May 2023","year":2023,"month":5,"mo_name":"May","pcr":14.1,"vol_kt":795.0,"sig":-5.0,"mkt":10.9},{"label":"Jun 2023","year":2023,"month":6,"mo_name":"Jun","pcr":14.4,"vol_kt":876.0,"sig":-5.0,"mkt":11.2},{"label":"Jul 2023","year":2023,"month":7,"mo_name":"Jul","pcr":14.9,"vol_kt":905.0,"sig":-5.1,"mkt":11.1},{"label":"Aug 2023","year":2023,"month":8,"mo_name":"Aug","pcr":14.8,"vol_kt":891.0,"sig":-5.1,"mkt":11.0},{"label":"Sep 2023","year":2023,"month":9,"mo_name":"Sep","pcr":14.3,"vol_kt":819.0,"sig":-5.0,"mkt":10.7},{"label":"Oct 2023","year":2023,"month":10,"mo_name":"Oct","pcr":14.1,"vol_kt":855.0,"sig":-4.9,"mkt":11.3},{"label":"Nov 2023","year":2023,"month":11,"mo_name":"Nov","pcr":13.5,"vol_kt":851.0,"sig":-5.0,"mkt":11.3},{"label":"Dec 2023","year":2023,"month":12,"mo_name":"Dec","pcr":13.1,"vol_kt":744.0,"sig":-5.2,"mkt":10.6},{"label":"Jan 2024","year":2024,"month":1,"mo_name":"Jan","pcr":14.4,"vol_kt":648.0,"sig":-5.9,"mkt":12.9},{"label":"Feb 2024","year":2024,"month":2,"mo_name":"Feb","pcr":14.7,"vol_kt":634.0,"sig":-5.9,"mkt":12.8},{"label":"Mar 2024","year":2024,"month":3,"mo_name":"Mar","pcr":15.3,"vol_kt":698.0,"sig":-6.1,"mkt":13.0},{"label":"Apr 2024","year":2024,"month":4,"mo_name":"Apr","pcr":15.5,"vol_kt":751.0,"sig":-6.0,"mkt":12.8},{"label":"May 2024","year":2024,"month":5,"mo_name":"May","pcr":15.9,"vol_kt":794.0,"sig":-5.9,"mkt":13.1},{"label":"Jun 2024","year":2024,"month":6,"mo_name":"Jun","pcr":16.5,"vol_kt":873.0,"sig":-6.1,"mkt":13.0},{"label":"Jul 2024","year":2024,"month":7,"mo_name":"Jul","pcr":17.0,"vol_kt":908.0,"sig":-6.0,"mkt":12.9},{"label":"Aug 2024","year":2024,"month":8,"mo_name":"Aug","pcr":16.7,"vol_kt":880.0,"sig":-6.1,"mkt":13.1},{"label":"Sep 2024","year":2024,"month":9,"mo_name":"Sep","pcr":16.1,"vol_kt":819.0,"sig":-6.2,"mkt":12.9},{"label":"Oct 2024","year":2024,"month":10,"mo_name":"Oct","pcr":16.1,"vol_kt":836.0,"sig":-6.0,"mkt":13.0},{"label":"Nov 2024","year":2024,"month":11,"mo_name":"Nov","pcr":15.4,"vol_kt":852.0,"sig":-5.8,"mkt":12.7},{"label":"Dec 2024","year":2024,"month":12,"mo_name":"Dec","pcr":15.1,"vol_kt":740.0,"sig":-6.2,"mkt":12.9}],"weekly":[{"label":"Wk 1","week":1,"pcr":15.2,"vol_kt":150.0,"sig":-5.5,"mkt":12.0},{"label":"Wk 2","week":2,"pcr":15.2,"vol_kt":152.0,"sig":-5.6,"mkt":12.1},{"label":"Wk 3","week":3,"pcr":15.2,"vol_kt":150.0,"sig":-5.5,"mkt":12.0},{"label":"Wk 4","week":4,"pcr":15.2,"vol_kt":154.0,"sig":-5.4,"mkt":12.1},{"label":"Wk 5","week":5,"pcr":15.3,"vol_kt":156.0,"sig":-5.4,"mkt":12.1},{"label":"Wk 6","week":6,"pcr":15.3,"vol_kt":158.0,"sig":-5.5,"mkt":12.0},{"label":"Wk 7","week":7,"pcr":15.3,"vol_kt":154.0,"sig":-5.6,"mkt":12.2},{"label":"Wk 8","week":8,"pcr":15.4,"vol_kt":162.0,"sig":-5.5,"mkt":12.2},{"label":"Wk 9","week":9,"pcr":15.3,"vol_kt":162.0,"sig":-5.7,"mkt":12.0},{"label":"Wk 10","week":10,"pcr":15.4,"vol_kt":168.0,"sig":-5.5,"mkt":12.2},{"label":"Wk 11","week":11,"pcr":15.5,"vol_kt":175.0,"sig":-5.7,"mkt":12.2},{"label":"Wk 12","week":12,"pcr":15.4,"vol_kt":173.0,"sig":-5.5,"mkt":12.4},{"label":"Wk 13","week":13,"pcr":15.4,"vol_kt":179.0,"sig":-5.5,"mkt":11.9},{"label":"Wk 14","week":14,"pcr":15.5,"vol_kt":185.0,"sig":-5.7,"mkt":12.5},{"label":"Wk 15","week":15,"pcr":15.6,"vol_kt":188.0,"sig":-5.7,"mkt":12.2},{"label":"Wk 16","week":16,"pcr":15.4,"vol_kt":189.0,"sig":-5.5,"mkt":12.5},{"label":"Wk 17","week":17,"pcr":15.6,"vol_kt":193.0,"sig":-5.4,"mkt":12.6},{"label":"Wk 18","week":18,"pcr":15.6,"vol_kt":197.0,"sig":-5.8,"mkt":12.4},{"label":"Wk 19","week":19,"pcr":15.5,"vol_kt":202.0,"sig":-5.6,"mkt":12.1},{"label":"Wk 20","week":20,"pcr":15.8,"vol_kt":209.0,"sig":-5.8,"mkt":12.2},{"label":"Wk 21","week":21,"pcr":15.6,"vol_kt":205.0,"sig":-5.7,"mkt":12.0},{"label":"Wk 22","week":22,"pcr":15.6,"vol_kt":214.0,"sig":-5.8,"mkt":12.4},{"label":"Wk 23","week":23,"pcr":15.5,"vol_kt":213.0,"sig":-5.7,"mkt":12.7},{"label":"Wk 24","week":24,"pcr":15.7,"vol_kt":211.0,"sig":-5.7,"mkt":12.4},{"label":"Wk 25","week":25,"pcr":15.6,"vol_kt":214.0,"sig":-5.8,"mkt":12.5},{"label":"Wk 26","week":26,"pcr":15.8,"vol_kt":212.0,"sig":-5.7,"mkt":12.8},{"label":"Wk 27","week":27,"pcr":15.7,"vol_kt":217.0,"sig":-5.8,"mkt":12.4},{"label":"Wk 28","week":28,"pcr":16.0,"vol_kt":212.0,"sig":-5.6,"mkt":12.7},{"label":"Wk 29","week":29,"pcr":15.6,"vol_kt":211.0,"sig":-5.8,"mkt":12.4},{"label":"Wk 30","week":30,"pcr":15.6,"vol_kt":210.0,"sig":-5.7,"mkt":12.6},{"label":"Wk 31","week":31,"pcr":15.8,"vol_kt":205.0,"sig":-5.9,"mkt":12.5},{"label":"Wk 32","week":32,"pcr":15.7,"vol_kt":204.0,"sig":-5.8,"mkt":12.5},{"label":"Wk 33","week":33,"pcr":15.8,"vol_kt":200.0,"sig":-5.8,"mkt":12.7},{"label":"Wk 34","week":34,"pcr":15.9,"vol_kt":200.0,"sig":-6.0,"mkt":12.6},{"label":"Wk 35","week":35,"pcr":15.9,"vol_kt":197.0,"sig":-6.0,"mkt":12.7},{"label":"Wk 36","week":36,"pcr":16.0,"vol_kt":192.0,"sig":-5.9,"mkt":12.8},{"label":"Wk 37","week":37,"pcr":15.9,"vol_kt":190.0,"sig":-5.8,"mkt":12.7},{"label":"Wk 38","week":38,"pcr":15.8,"vol_kt":184.0,"sig":-5.7,"mkt":12.7},{"label":"Wk 39","week":39,"pcr":15.9,"vol_kt":179.0,"sig":-5.8,"mkt":12.6},{"label":"Wk 40","week":40,"pcr":16.0,"vol_kt":174.0,"sig":-6.0,"mkt":12.8},{"label":"Wk 41","week":41,"pcr":15.9,"vol_kt":174.0,"sig":-5.8,"mkt":12.7},{"label":"Wk 42","week":42,"pcr":15.9,"vol_kt":167.0,"sig":-5.8,"mkt":12.9},{"label":"Wk 43","week":43,"pcr":15.9,"vol_kt":166.0,"sig":-6.0,"mkt":12.8},{"label":"Wk 44","week":44,"pcr":15.9,"vol_kt":162.0,"sig":-5.9,"mkt":12.6},{"label":"Wk 45","week":45,"pcr":15.9,"vol_kt":157.0,"sig":-6.1,"mkt":12.8},{"label":"Wk 46","week":46,"pcr":15.7,"vol_kt":158.0,"sig":-5.8,"mkt":12.9},{"label":"Wk 47","week":47,"pcr":15.8,"vol_kt":151.0,"sig":-6.0,"mkt":12.5},{"label":"Wk 48","week":48,"pcr":15.9,"vol_kt":153.0,"sig":-6.0,"mkt":12.8},{"label":"Wk 49","week":49,"pcr":15.9,"vol_kt":151.0,"sig":-5.8,"mkt":12.9},{"label":"Wk 50","week":50,"pcr":15.9,"vol_kt":148.0,"sig":-6.0,"mkt":13.2},{"label":"Wk 51","week":51,"pcr":15.9,"vol_kt":146.0,"sig":-6.1,"mkt":12.7},{"label":"Wk 52","week":52,"pcr":16.0,"vol_kt":145.0,"sig":-6.1,"mkt":12.7}],"daily":[{"label":"01 Jan","date":"2024-01-01","pcr":15.1,"vol_kt":21.8,"sig":-5.6,"mkt":11.3},{"label":"02 Jan","date":"2024-01-02","pcr":15.2,"vol_kt":20.7,"sig":-5.5,"mkt":11.6},{"label":"03 Jan","date":"2024-01-03","pcr":15.2,"vol_kt":19.5,"sig":-5.5,"mkt":11.6},{"label":"04 Jan","date":"2024-01-04","pcr":15.1,"vol_kt":19.4,"sig":-5.4,"mkt":11.5},{"label":"05 Jan","date":"2024-01-05","pcr":15.2,"vol_kt":21.1,"sig":-5.4,"mkt":11.6},{"label":"06 Jan","date":"2024-01-06","pcr":15.2,"vol_kt":16.0,"sig":-5.3,"mkt":11.7},{"label":"07 Jan","date":"2024-01-07","pcr":15.3,"vol_kt":13.9,"sig":-5.1,"mkt":11.4},{"label":"08 Jan","date":"2024-01-08","pcr":15.2,"vol_kt":20.3,"sig":-5.3,"mkt":11.6},{"label":"09 Jan","date":"2024-01-09","pcr":15.0,"vol_kt":21.5,"sig":-5.5,"mkt":11.5},{"label":"10 Jan","date":"2024-01-10","pcr":15.1,"vol_kt":20.3,"sig":-5.6,"mkt":11.5},{"label":"11 Jan","date":"2024-01-11","pcr":15.2,"vol_kt":22.1,"sig":-5.6,"mkt":11.3},{"label":"12 Jan","date":"2024-01-12","pcr":15.1,"vol_kt":22.8,"sig":-5.6,"mkt":11.8},{"label":"13 Jan","date":"2024-01-13","pcr":15.3,"vol_kt":13.9,"sig":-5.6,"mkt":11.6},{"label":"14 Jan","date":"2024-01-14","pcr":15.1,"vol_kt":18.1,"sig":-5.6,"mkt":11.6},{"label":"15 Jan","date":"2024-01-15","pcr":15.4,"vol_kt":21.1,"sig":-5.6,"mkt":11.5},{"label":"16 Jan","date":"2024-01-16","pcr":15.3,"vol_kt":22.3,"sig":-5.5,"mkt":11.4},{"label":"17 Jan","date":"2024-01-17","pcr":15.2,"vol_kt":20.5,"sig":-5.7,"mkt":11.5},{"label":"18 Jan","date":"2024-01-18","pcr":15.1,"vol_kt":22.0,"sig":-5.3,"mkt":11.8},{"label":"19 Jan","date":"2024-01-19","pcr":15.2,"vol_kt":20.8,"sig":-5.5,"mkt":11.7},{"label":"20 Jan","date":"2024-01-20","pcr":15.2,"vol_kt":15.2,"sig":-5.3,"mkt":11.6},{"label":"21 Jan","date":"2024-01-21","pcr":15.2,"vol_kt":15.5,"sig":-5.5,"mkt":11.5},{"label":"22 Jan","date":"2024-01-22","pcr":15.2,"vol_kt":20.0,"sig":-5.6,"mkt":11.8},{"label":"23 Jan","date":"2024-01-23","pcr":15.3,"vol_kt":21.3,"sig":-5.6,"mkt":11.6},{"label":"24 Jan","date":"2024-01-24","pcr":15.4,"vol_kt":20.8,"sig":-5.4,"mkt":11.4},{"label":"25 Jan","date":"2024-01-25","pcr":15.2,"vol_kt":23.6,"sig":-5.7,"mkt":11.7},{"label":"26 Jan","date":"2024-01-26","pcr":15.0,"vol_kt":21.4,"sig":-5.6,"mkt":11.7},{"label":"27 Jan","date":"2024-01-27","pcr":14.9,"vol_kt":13.2,"sig":-5.6,"mkt":11.6},{"label":"28 Jan","date":"2024-01-28","pcr":15.2,"vol_kt":15.3,"sig":-5.7,"mkt":11.6},{"label":"29 Jan","date":"2024-01-29","pcr":15.2,"vol_kt":21.9,"sig":-5.5,"mkt":11.8},{"label":"30 Jan","date":"2024-01-30","pcr":15.2,"vol_kt":21.3,"sig":-5.5,"mkt":11.6},{"label":"31 Jan","date":"2024-01-31","pcr":15.3,"vol_kt":19.9,"sig":-5.5,"mkt":11.5},{"label":"01 Feb","date":"2024-02-01","pcr":15.2,"vol_kt":19.9,"sig":-5.4,"mkt":11.6},{"label":"02 Feb","date":"2024-02-02","pcr":15.4,"vol_kt":22.1,"sig":-5.7,"mkt":11.5},{"label":"03 Feb","date":"2024-02-03","pcr":15.4,"vol_kt":14.8,"sig":-5.7,"mkt":11.6},{"label":"04 Feb","date":"2024-02-04","pcr":15.3,"vol_kt":14.6,"sig":-5.6,"mkt":11.6},{"label":"05 Feb","date":"2024-02-05","pcr":15.0,"vol_kt":22.6,"sig":-5.6,"mkt":11.8},{"label":"06 Feb","date":"2024-02-06","pcr":15.1,"vol_kt":20.1,"sig":-5.4,"mkt":11.5},{"label":"07 Feb","date":"2024-02-07","pcr":15.2,"vol_kt":22.8,"sig":-5.6,"mkt":11.5},{"label":"08 Feb","date":"2024-02-08","pcr":15.3,"vol_kt":21.9,"sig":-5.4,"mkt":11.7},{"label":"09 Feb","date":"2024-02-09","pcr":15.7,"vol_kt":20.2,"sig":-5.6,"mkt":11.5},{"label":"10 Feb","date":"2024-02-10","pcr":15.4,"vol_kt":17.0,"sig":-5.5,"mkt":11.6},{"label":"11 Feb","date":"2024-02-11","pcr":15.2,"vol_kt":13.6,"sig":-5.4,"mkt":11.7},{"label":"12 Feb","date":"2024-02-12","pcr":15.3,"vol_kt":23.4,"sig":-5.5,"mkt":11.8},{"label":"13 Feb","date":"2024-02-13","pcr":15.1,"vol_kt":21.5,"sig":-5.5,"mkt":11.7},{"label":"14 Feb","date":"2024-02-14","pcr":15.4,"vol_kt":21.2,"sig":-5.5,"mkt":11.9},{"label":"15 Feb","date":"2024-02-15","pcr":15.4,"vol_kt":23.5,"sig":-5.6,"mkt":11.8},{"label":"16 Feb","date":"2024-02-16","pcr":15.5,"vol_kt":22.6,"sig":-5.4,"mkt":11.6},{"label":"17 Feb","date":"2024-02-17","pcr":15.4,"vol_kt":17.3,"sig":-5.6,"mkt":11.8},{"label":"18 Feb","date":"2024-02-18","pcr":15.2,"vol_kt":15.3,"sig":-5.6,"mkt":11.9},{"label":"19 Feb","date":"2024-02-19","pcr":15.3,"vol_kt":23.8,"sig":-5.6,"mkt":11.7},{"label":"20 Feb","date":"2024-02-20","pcr":15.2,"vol_kt":22.1,"sig":-5.5,"mkt":11.7},{"label":"21 Feb","date":"2024-02-21","pcr":15.5,"vol_kt":22.6,"sig":-5.6,"mkt":11.9},{"label":"22 Feb","date":"2024-02-22","pcr":15.2,"vol_kt":21.1,"sig":-5.4,"mkt":11.8},{"label":"23 Feb","date":"2024-02-23","pcr":15.1,"vol_kt":23.0,"sig":-5.6,"mkt":11.9},{"label":"24 Feb","date":"2024-02-24","pcr":15.2,"vol_kt":15.9,"sig":-5.7,"mkt":11.6},{"label":"25 Feb","date":"2024-02-25","pcr":15.2,"vol_kt":14.9,"sig":-5.7,"mkt":11.5},{"label":"26 Feb","date":"2024-02-26","pcr":15.1,"vol_kt":21.3,"sig":-5.6,"mkt":11.7},{"label":"27 Feb","date":"2024-02-27","pcr":15.2,"vol_kt":23.8,"sig":-5.6,"mkt":11.7},{"label":"28 Feb","date":"2024-02-28","pcr":15.3,"vol_kt":25.2,"sig":-5.6,"mkt":11.8},{"label":"29 Feb","date":"2024-02-29","pcr":15.0,"vol_kt":22.6,"sig":-5.8,"mkt":11.7},{"label":"01 Mar","date":"2024-03-01","pcr":15.4,"vol_kt":22.6,"sig":-5.5,"mkt":11.6},{"label":"02 Mar","date":"2024-03-02","pcr":15.4,"vol_kt":15.0,"sig":-5.6,"mkt":11.8},{"label":"03 Mar","date":"2024-03-03","pcr":15.4,"vol_kt":16.8,"sig":-5.4,"mkt":11.7},{"label":"04 Mar","date":"2024-03-04","pcr":15.3,"vol_kt":20.3,"sig":-5.4,"mkt":11.7},{"label":"05 Mar","date":"2024-03-05","pcr":15.2,"vol_kt":25.3,"sig":-5.5,"mkt":11.8},{"label":"06 Mar","date":"2024-03-06","pcr":15.2,"vol_kt":24.3,"sig":-5.7,"mkt":11.6},{"label":"07 Mar","date":"2024-03-07","pcr":15.5,"vol_kt":21.3,"sig":-5.5,"mkt":11.8},{"label":"08 Mar","date":"2024-03-08","pcr":15.6,"vol_kt":24.3,"sig":-5.8,"mkt":11.7},{"label":"09 Mar","date":"2024-03-09","pcr":15.4,"vol_kt":17.7,"sig":-5.5,"mkt":11.5},{"label":"10 Mar","date":"2024-03-10","pcr":15.3,"vol_kt":18.5,"sig":-5.4,"mkt":12.0},{"label":"11 Mar","date":"2024-03-11","pcr":15.3,"vol_kt":25.4,"sig":-5.4,"mkt":11.9},{"label":"12 Mar","date":"2024-03-12","pcr":15.4,"vol_kt":25.2,"sig":-5.7,"mkt":11.6},{"label":"13 Mar","date":"2024-03-13","pcr":15.5,"vol_kt":23.9,"sig":-5.6,"mkt":11.7},{"label":"14 Mar","date":"2024-03-14","pcr":15.3,"vol_kt":24.6,"sig":-5.7,"mkt":11.8},{"label":"15 Mar","date":"2024-03-15","pcr":15.4,"vol_kt":24.3,"sig":-5.7,"mkt":11.9},{"label":"16 Mar","date":"2024-03-16","pcr":15.6,"vol_kt":16.9,"sig":-5.5,"mkt":11.9},{"label":"17 Mar","date":"2024-03-17","pcr":15.0,"vol_kt":16.8,"sig":-5.7,"mkt":11.9},{"label":"18 Mar","date":"2024-03-18","pcr":15.4,"vol_kt":25.2,"sig":-5.5,"mkt":11.7},{"label":"19 Mar","date":"2024-03-19","pcr":15.3,"vol_kt":23.3,"sig":-5.6,"mkt":11.8},{"label":"20 Mar","date":"2024-03-20","pcr":15.4,"vol_kt":23.9,"sig":-5.5,"mkt":11.9},{"label":"21 Mar","date":"2024-03-21","pcr":15.6,"vol_kt":25.7,"sig":-5.6,"mkt":11.9},{"label":"22 Mar","date":"2024-03-22","pcr":15.5,"vol_kt":24.2,"sig":-5.5,"mkt":12.0},{"label":"23 Mar","date":"2024-03-23","pcr":15.6,"vol_kt":18.1,"sig":-5.6,"mkt":11.9},{"label":"24 Mar","date":"2024-03-24","pcr":15.4,"vol_kt":18.8,"sig":-5.6,"mkt":11.8},{"label":"25 Mar","date":"2024-03-25","pcr":15.6,"vol_kt":25.4,"sig":-5.6,"mkt":12.0},{"label":"26 Mar","date":"2024-03-26","pcr":15.4,"vol_kt":25.6,"sig":-5.6,"mkt":11.7},{"label":"27 Mar","date":"2024-03-27","pcr":15.4,"vol_kt":24.0,"sig":-5.6,"mkt":11.7},{"label":"28 Mar","date":"2024-03-28","pcr":15.5,"vol_kt":26.3,"sig":-5.6,"mkt":11.8},{"label":"29 Mar","date":"2024-03-29","pcr":15.4,"vol_kt":23.2,"sig":-5.7,"mkt":11.8},{"label":"30 Mar","date":"2024-03-30","pcr":15.4,"vol_kt":18.3,"sig":-5.7,"mkt":11.9},{"label":"31 Mar","date":"2024-03-31","pcr":15.3,"vol_kt":17.2,"sig":-5.6,"mkt":11.8},{"label":"01 Apr","date":"2024-04-01","pcr":15.5,"vol_kt":26.6,"sig":-5.6,"mkt":11.9},{"label":"02 Apr","date":"2024-04-02","pcr":15.3,"vol_kt":24.7,"sig":-5.8,"mkt":12.2},{"label":"03 Apr","date":"2024-04-03","pcr":15.3,"vol_kt":25.7,"sig":-5.7,"mkt":11.9},{"label":"04 Apr","date":"2024-04-04","pcr":15.3,"vol_kt":23.8,"sig":-5.7,"mkt":11.7},{"label":"05 Apr","date":"2024-04-05","pcr":15.4,"vol_kt":25.3,"sig":-5.7,"mkt":11.9},{"label":"06 Apr","date":"2024-04-06","pcr":15.3,"vol_kt":20.0,"sig":-5.7,"mkt":11.9},{"label":"07 Apr","date":"2024-04-07","pcr":15.3,"vol_kt":19.7,"sig":-5.7,"mkt":12.0},{"label":"08 Apr","date":"2024-04-08","pcr":15.5,"vol_kt":26.1,"sig":-5.6,"mkt":11.9},{"label":"09 Apr","date":"2024-04-09","pcr":15.6,"vol_kt":27.5,"sig":-5.6,"mkt":11.8},{"label":"10 Apr","date":"2024-04-10","pcr":15.3,"vol_kt":25.7,"sig":-5.7,"mkt":12.0},{"label":"11 Apr","date":"2024-04-11","pcr":15.3,"vol_kt":28.0,"sig":-5.6,"mkt":11.7},{"label":"12 Apr","date":"2024-04-12","pcr":15.4,"vol_kt":23.5,"sig":-5.7,"mkt":11.9},{"label":"13 Apr","date":"2024-04-13","pcr":15.4,"vol_kt":18.8,"sig":-5.7,"mkt":11.9},{"label":"14 Apr","date":"2024-04-14","pcr":15.6,"vol_kt":20.7,"sig":-5.8,"mkt":12.1},{"label":"15 Apr","date":"2024-04-15","pcr":15.2,"vol_kt":25.9,"sig":-5.5,"mkt":11.7},{"label":"16 Apr","date":"2024-04-16","pcr":15.5,"vol_kt":25.4,"sig":-5.7,"mkt":11.9},{"label":"17 Apr","date":"2024-04-17","pcr":15.6,"vol_kt":26.0,"sig":-5.7,"mkt":12.0},{"label":"18 Apr","date":"2024-04-18","pcr":15.4,"vol_kt":26.1,"sig":-5.7,"mkt":12.0},{"label":"19 Apr","date":"2024-04-19","pcr":15.5,"vol_kt":26.0,"sig":-5.7,"mkt":12.0},{"label":"20 Apr","date":"2024-04-20","pcr":15.4,"vol_kt":19.4,"sig":-5.7,"mkt":11.9},{"label":"21 Apr","date":"2024-04-21","pcr":15.3,"vol_kt":20.2,"sig":-5.8,"mkt":12.1},{"label":"22 Apr","date":"2024-04-22","pcr":15.5,"vol_kt":25.9,"sig":-5.6,"mkt":12.0},{"label":"23 Apr","date":"2024-04-23","pcr":15.5,"vol_kt":28.9,"sig":-5.7,"mkt":11.9},{"label":"24 Apr","date":"2024-04-24","pcr":15.4,"vol_kt":26.4,"sig":-5.7,"mkt":12.0},{"label":"25 Apr","date":"2024-04-25","pcr":15.5,"vol_kt":27.0,"sig":-5.7,"mkt":12.0},{"label":"26 Apr","date":"2024-04-26","pcr":15.4,"vol_kt":26.4,"sig":-5.7,"mkt":11.9},{"label":"27 Apr","date":"2024-04-27","pcr":15.3,"vol_kt":21.0,"sig":-5.6,"mkt":12.0},{"label":"28 Apr","date":"2024-04-28","pcr":15.5,"vol_kt":20.7,"sig":-5.7,"mkt":12.1},{"label":"29 Apr","date":"2024-04-29","pcr":15.7,"vol_kt":28.0,"sig":-5.6,"mkt":12.1},{"label":"30 Apr","date":"2024-04-30","pcr":15.4,"vol_kt":26.6,"sig":-5.6,"mkt":11.8},{"label":"01 May","date":"2024-05-01","pcr":15.7,"vol_kt":29.1,"sig":-5.6,"mkt":12.0},{"label":"02 May","date":"2024-05-02","pcr":15.7,"vol_kt":27.0,"sig":-5.8,"mkt":11.9},{"label":"03 May","date":"2024-05-03","pcr":15.4,"vol_kt":27.0,"sig":-5.7,"mkt":12.0},{"label":"04 May","date":"2024-05-04","pcr":15.4,"vol_kt":22.3,"sig":-5.8,"mkt":11.9},{"label":"05 May","date":"2024-05-05","pcr":15.5,"vol_kt":20.1,"sig":-5.6,"mkt":11.9},{"label":"06 May","date":"2024-05-06","pcr":15.4,"vol_kt":27.6,"sig":-5.7,"mkt":12.1},{"label":"07 May","date":"2024-05-07","pcr":15.4,"vol_kt":29.3,"sig":-5.6,"mkt":12.1},{"label":"08 May","date":"2024-05-08","pcr":15.6,"vol_kt":29.4,"sig":-5.6,"mkt":12.0},{"label":"09 May","date":"2024-05-09","pcr":15.5,"vol_kt":26.4,"sig":-5.6,"mkt":12.0},{"label":"10 May","date":"2024-05-10","pcr":15.5,"vol_kt":29.3,"sig":-5.8,"mkt":11.9},{"label":"11 May","date":"2024-05-11","pcr":15.4,"vol_kt":20.0,"sig":-5.7,"mkt":11.9},{"label":"12 May","date":"2024-05-12","pcr":15.5,"vol_kt":18.7,"sig":-5.9,"mkt":12.1},{"label":"13 May","date":"2024-05-13","pcr":15.3,"vol_kt":28.1,"sig":-5.8,"mkt":11.9},{"label":"14 May","date":"2024-05-14","pcr":15.4,"vol_kt":28.4,"sig":-5.6,"mkt":12.1},{"label":"15 May","date":"2024-05-15","pcr":15.5,"vol_kt":29.8,"sig":-5.6,"mkt":12.1},{"label":"16 May","date":"2024-05-16","pcr":15.5,"vol_kt":30.2,"sig":-5.5,"mkt":12.1},{"label":"17 May","date":"2024-05-17","pcr":15.7,"vol_kt":30.1,"sig":-5.6,"mkt":11.9},{"label":"18 May","date":"2024-05-18","pcr":15.4,"vol_kt":20.9,"sig":-5.9,"mkt":12.0},{"label":"19 May","date":"2024-05-19","pcr":15.6,"vol_kt":20.2,"sig":-5.6,"mkt":11.9},{"label":"20 May","date":"2024-05-20","pcr":15.4,"vol_kt":30.4,"sig":-5.7,"mkt":12.1},{"label":"21 May","date":"2024-05-21","pcr":15.7,"vol_kt":30.8,"sig":-5.8,"mkt":12.2},{"label":"22 May","date":"2024-05-22","pcr":15.4,"vol_kt":29.3,"sig":-5.7,"mkt":12.2},{"label":"23 May","date":"2024-05-23","pcr":15.4,"vol_kt":29.9,"sig":-5.6,"mkt":12.2},{"label":"24 May","date":"2024-05-24","pcr":15.5,"vol_kt":30.6,"sig":-5.8,"mkt":12.2},{"label":"25 May","date":"2024-05-25","pcr":15.6,"vol_kt":19.5,"sig":-5.7,"mkt":12.1},{"label":"26 May","date":"2024-05-26","pcr":15.5,"vol_kt":20.4,"sig":-5.7,"mkt":11.9},{"label":"27 May","date":"2024-05-27","pcr":15.7,"vol_kt":28.2,"sig":-5.8,"mkt":12.2},{"label":"28 May","date":"2024-05-28","pcr":15.6,"vol_kt":30.4,"sig":-5.6,"mkt":12.1},{"label":"29 May","date":"2024-05-29","pcr":15.4,"vol_kt":30.6,"sig":-5.6,"mkt":12.1},{"label":"30 May","date":"2024-05-30","pcr":15.4,"vol_kt":31.2,"sig":-5.6,"mkt":12.0},{"label":"31 May","date":"2024-05-31","pcr":15.6,"vol_kt":28.0,"sig":-5.8,"mkt":12.0},{"label":"01 Jun","date":"2024-06-01","pcr":15.5,"vol_kt":20.4,"sig":-5.8,"mkt":12.2},{"label":"02 Jun","date":"2024-06-02","pcr":15.6,"vol_kt":22.2,"sig":-5.6,"mkt":12.1},{"label":"03 Jun","date":"2024-06-03","pcr":15.5,"vol_kt":30.5,"sig":-5.5,"mkt":12.2},{"label":"04 Jun","date":"2024-06-04","pcr":15.7,"vol_kt":31.1,"sig":-5.6,"mkt":11.9},{"label":"05 Jun","date":"2024-06-05","pcr":15.6,"vol_kt":30.2,"sig":-5.7,"mkt":12.1},{"label":"06 Jun","date":"2024-06-06","pcr":15.5,"vol_kt":30.4,"sig":-5.6,"mkt":12.0},{"label":"07 Jun","date":"2024-06-07","pcr":15.6,"vol_kt":29.3,"sig":-5.8,"mkt":12.2},{"label":"08 Jun","date":"2024-06-08","pcr":15.5,"vol_kt":20.8,"sig":-5.8,"mkt":12.2},{"label":"09 Jun","date":"2024-06-09","pcr":15.6,"vol_kt":20.3,"sig":-5.8,"mkt":12.1},{"label":"10 Jun","date":"2024-06-10","pcr":15.6,"vol_kt":28.8,"sig":-5.7,"mkt":12.1},{"label":"11 Jun","date":"2024-06-11","pcr":15.9,"vol_kt":29.0,"sig":-5.8,"mkt":12.2},{"label":"12 Jun","date":"2024-06-12","pcr":15.5,"vol_kt":31.1,"sig":-5.5,"mkt":12.1},{"label":"13 Jun","date":"2024-06-13","pcr":15.6,"vol_kt":29.5,"sig":-5.7,"mkt":12.3},{"label":"14 Jun","date":"2024-06-14","pcr":15.7,"vol_kt":29.1,"sig":-5.6,"mkt":12.3},{"label":"15 Jun","date":"2024-06-15","pcr":15.6,"vol_kt":20.9,"sig":-5.7,"mkt":12.1},{"label":"16 Jun","date":"2024-06-16","pcr":15.6,"vol_kt":21.4,"sig":-6.0,"mkt":12.3},{"label":"17 Jun","date":"2024-06-17","pcr":15.6,"vol_kt":31.5,"sig":-5.7,"mkt":12.2},{"label":"18 Jun","date":"2024-06-18","pcr":15.7,"vol_kt":30.7,"sig":-5.7,"mkt":12.6},{"label":"19 Jun","date":"2024-06-19","pcr":15.6,"vol_kt":30.5,"sig":-5.6,"mkt":12.1},{"label":"20 Jun","date":"2024-06-20","pcr":15.5,"vol_kt":28.5,"sig":-5.7,"mkt":12.3},{"label":"21 Jun","date":"2024-06-21","pcr":15.7,"vol_kt":28.7,"sig":-5.6,"mkt":12.4},{"label":"22 Jun","date":"2024-06-22","pcr":15.6,"vol_kt":21.9,"sig":-5.7,"mkt":12.3},{"label":"23 Jun","date":"2024-06-23","pcr":15.7,"vol_kt":20.5,"sig":-5.8,"mkt":12.1},{"label":"24 Jun","date":"2024-06-24","pcr":15.7,"vol_kt":31.0,"sig":-5.8,"mkt":12.3},{"label":"25 Jun","date":"2024-06-25","pcr":15.4,"vol_kt":31.4,"sig":-5.8,"mkt":12.2},{"label":"26 Jun","date":"2024-06-26","pcr":15.7,"vol_kt":29.4,"sig":-5.6,"mkt":12.2},{"label":"27 Jun","date":"2024-06-27","pcr":15.6,"vol_kt":31.0,"sig":-5.9,"mkt":12.3},{"label":"28 Jun","date":"2024-06-28","pcr":15.6,"vol_kt":31.6,"sig":-5.8,"mkt":12.2},{"label":"29 Jun","date":"2024-06-29","pcr":15.6,"vol_kt":21.8,"sig":-5.9,"mkt":12.2},{"label":"30 Jun","date":"2024-06-30","pcr":15.7,"vol_kt":21.7,"sig":-5.8,"mkt":12.3},{"label":"01 Jul","date":"2024-07-01","pcr":15.4,"vol_kt":27.8,"sig":-5.8,"mkt":12.3},{"label":"02 Jul","date":"2024-07-02","pcr":15.6,"vol_kt":29.3,"sig":-5.8,"mkt":12.1},{"label":"03 Jul","date":"2024-07-03","pcr":15.6,"vol_kt":28.4,"sig":-5.8,"mkt":12.3},{"label":"04 Jul","date":"2024-07-04","pcr":15.4,"vol_kt":29.7,"sig":-5.7,"mkt":12.4},{"label":"05 Jul","date":"2024-07-05","pcr":15.4,"vol_kt":30.7,"sig":-5.9,"mkt":12.1},{"label":"06 Jul","date":"2024-07-06","pcr":15.8,"vol_kt":22.6,"sig":-5.8,"mkt":12.3},{"label":"07 Jul","date":"2024-07-07","pcr":15.7,"vol_kt":22.1,"sig":-5.5,"mkt":12.3},{"label":"08 Jul","date":"2024-07-08","pcr":15.3,"vol_kt":30.0,"sig":-5.8,"mkt":12.3},{"label":"09 Jul","date":"2024-07-09","pcr":15.6,"vol_kt":29.5,"sig":-5.9,"mkt":12.4},{"label":"10 Jul","date":"2024-07-10","pcr":15.7,"vol_kt":29.5,"sig":-5.7,"mkt":12.4},{"label":"11 Jul","date":"2024-07-11","pcr":15.8,"vol_kt":29.0,"sig":-5.7,"mkt":12.2},{"label":"12 Jul","date":"2024-07-12","pcr":15.8,"vol_kt":30.0,"sig":-6.0,"mkt":12.3},{"label":"13 Jul","date":"2024-07-13","pcr":15.4,"vol_kt":21.5,"sig":-5.8,"mkt":12.3},{"label":"14 Jul","date":"2024-07-14","pcr":15.4,"vol_kt":20.4,"sig":-5.9,"mkt":12.3},{"label":"15 Jul","date":"2024-07-15","pcr":15.8,"vol_kt":31.1,"sig":-5.8,"mkt":12.5},{"label":"16 Jul","date":"2024-07-16","pcr":15.5,"vol_kt":31.0,"sig":-5.8,"mkt":12.3},{"label":"17 Jul","date":"2024-07-17","pcr":15.7,"vol_kt":29.4,"sig":-5.7,"mkt":12.3},{"label":"18 Jul","date":"2024-07-18","pcr":15.9,"vol_kt":29.8,"sig":-5.6,"mkt":12.4},{"label":"19 Jul","date":"2024-07-19","pcr":15.5,"vol_kt":31.8,"sig":-5.9,"mkt":12.1},{"label":"20 Jul","date":"2024-07-20","pcr":15.7,"vol_kt":23.0,"sig":-5.8,"mkt":12.3},{"label":"21 Jul","date":"2024-07-21","pcr":15.8,"vol_kt":22.5,"sig":-5.8,"mkt":12.4},{"label":"22 Jul","date":"2024-07-22","pcr":15.5,"vol_kt":29.4,"sig":-5.9,"mkt":12.1},{"label":"23 Jul","date":"2024-07-23","pcr":15.5,"vol_kt":31.5,"sig":-5.9,"mkt":12.3},{"label":"24 Jul","date":"2024-07-24","pcr":15.5,"vol_kt":31.0,"sig":-5.8,"mkt":12.4},{"label":"25 Jul","date":"2024-07-25","pcr":15.6,"vol_kt":28.6,"sig":-5.9,"mkt":12.4},{"label":"26 Jul","date":"2024-07-26","pcr":15.6,"vol_kt":30.9,"sig":-6.1,"mkt":12.5},{"label":"27 Jul","date":"2024-07-27","pcr":15.6,"vol_kt":24.1,"sig":-5.8,"mkt":12.4},{"label":"28 Jul","date":"2024-07-28","pcr":15.7,"vol_kt":20.4,"sig":-5.7,"mkt":12.3},{"label":"29 Jul","date":"2024-07-29","pcr":15.8,"vol_kt":30.8,"sig":-5.7,"mkt":12.3},{"label":"30 Jul","date":"2024-07-30","pcr":15.6,"vol_kt":30.1,"sig":-6.0,"mkt":12.3},{"label":"31 Jul","date":"2024-07-31","pcr":15.8,"vol_kt":28.2,"sig":-5.7,"mkt":12.3},{"label":"01 Aug","date":"2024-08-01","pcr":15.7,"vol_kt":28.3,"sig":-5.7,"mkt":12.4},{"label":"02 Aug","date":"2024-08-02","pcr":15.8,"vol_kt":31.3,"sig":-5.7,"mkt":12.4},{"label":"03 Aug","date":"2024-08-03","pcr":15.5,"vol_kt":22.9,"sig":-5.9,"mkt":12.3},{"label":"04 Aug","date":"2024-08-04","pcr":15.8,"vol_kt":21.8,"sig":-5.6,"mkt":12.4},{"label":"05 Aug","date":"2024-08-05","pcr":15.5,"vol_kt":29.2,"sig":-5.8,"mkt":12.4},{"label":"06 Aug","date":"2024-08-06","pcr":15.8,"vol_kt":29.2,"sig":-5.9,"mkt":12.5},{"label":"07 Aug","date":"2024-08-07","pcr":15.5,"vol_kt":31.5,"sig":-5.8,"mkt":12.2},{"label":"08 Aug","date":"2024-08-08","pcr":15.8,"vol_kt":32.2,"sig":-6.0,"mkt":12.5},{"label":"09 Aug","date":"2024-08-09","pcr":15.7,"vol_kt":29.6,"sig":-5.8,"mkt":12.5},{"label":"10 Aug","date":"2024-08-10","pcr":15.6,"vol_kt":22.8,"sig":-5.9,"mkt":12.6},{"label":"11 Aug","date":"2024-08-11","pcr":15.9,"vol_kt":19.6,"sig":-5.8,"mkt":12.6},{"label":"12 Aug","date":"2024-08-12","pcr":15.6,"vol_kt":29.0,"sig":-5.8,"mkt":12.6},{"label":"13 Aug","date":"2024-08-13","pcr":15.6,"vol_kt":29.1,"sig":-5.8,"mkt":12.4},{"label":"14 Aug","date":"2024-08-14","pcr":15.6,"vol_kt":27.5,"sig":-6.0,"mkt":12.3},{"label":"15 Aug","date":"2024-08-15","pcr":15.5,"vol_kt":28.2,"sig":-5.8,"mkt":12.4},{"label":"16 Aug","date":"2024-08-16","pcr":15.6,"vol_kt":27.8,"sig":-5.9,"mkt":12.3},{"label":"17 Aug","date":"2024-08-17","pcr":15.6,"vol_kt":21.7,"sig":-6.0,"mkt":12.4},{"label":"18 Aug","date":"2024-08-18","pcr":15.6,"vol_kt":23.7,"sig":-6.0,"mkt":12.5},{"label":"19 Aug","date":"2024-08-19","pcr":15.7,"vol_kt":27.9,"sig":-5.8,"mkt":12.5},{"label":"20 Aug","date":"2024-08-20","pcr":15.6,"vol_kt":29.3,"sig":-5.8,"mkt":12.6},{"label":"21 Aug","date":"2024-08-21","pcr":15.6,"vol_kt":30.5,"sig":-5.8,"mkt":12.2},{"label":"22 Aug","date":"2024-08-22","pcr":15.8,"vol_kt":28.5,"sig":-5.9,"mkt":12.6},{"label":"23 Aug","date":"2024-08-23","pcr":15.7,"vol_kt":29.8,"sig":-5.8,"mkt":12.6},{"label":"24 Aug","date":"2024-08-24","pcr":15.8,"vol_kt":21.1,"sig":-5.9,"mkt":12.6},{"label":"25 Aug","date":"2024-08-25","pcr":15.7,"vol_kt":22.9,"sig":-5.8,"mkt":12.6},{"label":"26 Aug","date":"2024-08-26","pcr":15.6,"vol_kt":27.9,"sig":-5.8,"mkt":12.3},{"label":"27 Aug","date":"2024-08-27","pcr":15.6,"vol_kt":28.2,"sig":-5.8,"mkt":12.5},{"label":"28 Aug","date":"2024-08-28","pcr":15.9,"vol_kt":27.8,"sig":-5.8,"mkt":12.5},{"label":"29 Aug","date":"2024-08-29","pcr":15.7,"vol_kt":28.5,"sig":-6.0,"mkt":12.5},{"label":"30 Aug","date":"2024-08-30","pcr":15.7,"vol_kt":27.0,"sig":-6.0,"mkt":12.4},{"label":"31 Aug","date":"2024-08-31","pcr":15.5,"vol_kt":21.2,"sig":-5.9,"mkt":12.3},{"label":"01 Sep","date":"2024-09-01","pcr":15.7,"vol_kt":21.0,"sig":-5.9,"mkt":12.5},{"label":"02 Sep","date":"2024-09-02","pcr":15.7,"vol_kt":27.7,"sig":-6.0,"mkt":12.5},{"label":"03 Sep","date":"2024-09-03","pcr":15.7,"vol_kt":31.4,"sig":-5.9,"mkt":12.5},{"label":"04 Sep","date":"2024-09-04","pcr":15.9,"vol_kt":27.6,"sig":-5.8,"mkt":12.4},{"label":"05 Sep","date":"2024-09-05","pcr":15.9,"vol_kt":26.9,"sig":-5.8,"mkt":12.7},{"label":"06 Sep","date":"2024-09-06","pcr":15.7,"vol_kt":27.6,"sig":-5.8,"mkt":12.6},{"label":"07 Sep","date":"2024-09-07","pcr":15.6,"vol_kt":20.0,"sig":-5.9,"mkt":12.4},{"label":"08 Sep","date":"2024-09-08","pcr":15.7,"vol_kt":21.2,"sig":-5.7,"mkt":12.8},{"label":"09 Sep","date":"2024-09-09","pcr":15.7,"vol_kt":26.4,"sig":-5.9,"mkt":12.7},{"label":"10 Sep","date":"2024-09-10","pcr":15.6,"vol_kt":26.9,"sig":-5.9,"mkt":12.8},{"label":"11 Sep","date":"2024-09-11","pcr":15.6,"vol_kt":28.6,"sig":-5.7,"mkt":12.5},{"label":"12 Sep","date":"2024-09-12","pcr":15.8,"vol_kt":25.3,"sig":-5.9,"mkt":12.5},{"label":"13 Sep","date":"2024-09-13","pcr":15.5,"vol_kt":27.6,"sig":-5.8,"mkt":12.4},{"label":"14 Sep","date":"2024-09-14","pcr":15.6,"vol_kt":18.6,"sig":-5.9,"mkt":12.5},{"label":"15 Sep","date":"2024-09-15","pcr":15.7,"vol_kt":18.2,"sig":-5.8,"mkt":12.5},{"label":"16 Sep","date":"2024-09-16","pcr":15.8,"vol_kt":26.6,"sig":-5.8,"mkt":12.5},{"label":"17 Sep","date":"2024-09-17","pcr":15.9,"vol_kt":26.9,"sig":-5.8,"mkt":12.7},{"label":"18 Sep","date":"2024-09-18","pcr":15.6,"vol_kt":27.8,"sig":-5.7,"mkt":12.5},{"label":"19 Sep","date":"2024-09-19","pcr":15.8,"vol_kt":26.2,"sig":-5.8,"mkt":12.6},{"label":"20 Sep","date":"2024-09-20","pcr":15.7,"vol_kt":28.1,"sig":-5.9,"mkt":12.6},{"label":"21 Sep","date":"2024-09-21","pcr":15.9,"vol_kt":21.4,"sig":-5.9,"mkt":12.7},{"label":"22 Sep","date":"2024-09-22","pcr":15.8,"vol_kt":17.1,"sig":-6.0,"mkt":12.4},{"label":"23 Sep","date":"2024-09-23","pcr":15.7,"vol_kt":25.8,"sig":-5.9,"mkt":12.7},{"label":"24 Sep","date":"2024-09-24","pcr":15.8,"vol_kt":29.4,"sig":-5.9,"mkt":12.7},{"label":"25 Sep","date":"2024-09-25","pcr":15.8,"vol_kt":28.0,"sig":-5.9,"mkt":12.7},{"label":"26 Sep","date":"2024-09-26","pcr":16.0,"vol_kt":25.2,"sig":-5.9,"mkt":12.7},{"label":"27 Sep","date":"2024-09-27","pcr":15.7,"vol_kt":24.9,"sig":-5.7,"mkt":12.6},{"label":"28 Sep","date":"2024-09-28","pcr":16.0,"vol_kt":18.1,"sig":-5.9,"mkt":12.7},{"label":"29 Sep","date":"2024-09-29","pcr":15.8,"vol_kt":17.5,"sig":-5.9,"mkt":12.7},{"label":"30 Sep","date":"2024-09-30","pcr":15.7,"vol_kt":25.9,"sig":-6.1,"mkt":12.6},{"label":"01 Oct","date":"2024-10-01","pcr":15.8,"vol_kt":25.1,"sig":-6.0,"mkt":12.5},{"label":"02 Oct","date":"2024-10-02","pcr":15.8,"vol_kt":27.4,"sig":-6.0,"mkt":12.6},{"label":"03 Oct","date":"2024-10-03","pcr":15.9,"vol_kt":25.9,"sig":-5.9,"mkt":12.6},{"label":"04 Oct","date":"2024-10-04","pcr":15.8,"vol_kt":25.3,"sig":-6.1,"mkt":12.6},{"label":"05 Oct","date":"2024-10-05","pcr":15.6,"vol_kt":19.8,"sig":-5.8,"mkt":12.5},{"label":"06 Oct","date":"2024-10-06","pcr":15.9,"vol_kt":21.1,"sig":-5.9,"mkt":12.8},{"label":"07 Oct","date":"2024-10-07","pcr":15.9,"vol_kt":24.9,"sig":-6.0,"mkt":12.6},{"label":"08 Oct","date":"2024-10-08","pcr":15.8,"vol_kt":22.3,"sig":-5.8,"mkt":12.6},{"label":"09 Oct","date":"2024-10-09","pcr":15.9,"vol_kt":24.5,"sig":-5.6,"mkt":12.5},{"label":"10 Oct","date":"2024-10-10","pcr":15.7,"vol_kt":25.8,"sig":-5.7,"mkt":12.5},{"label":"11 Oct","date":"2024-10-11","pcr":16.0,"vol_kt":23.8,"sig":-5.8,"mkt":12.7},{"label":"12 Oct","date":"2024-10-12","pcr":16.1,"vol_kt":20.0,"sig":-6.0,"mkt":13.0},{"label":"13 Oct","date":"2024-10-13","pcr":15.7,"vol_kt":17.4,"sig":-5.7,"mkt":12.6},{"label":"14 Oct","date":"2024-10-14","pcr":15.8,"vol_kt":24.8,"sig":-5.8,"mkt":12.7},{"label":"15 Oct","date":"2024-10-15","pcr":15.7,"vol_kt":24.8,"sig":-5.8,"mkt":12.9},{"label":"16 Oct","date":"2024-10-16","pcr":15.9,"vol_kt":23.0,"sig":-5.9,"mkt":12.6},{"label":"17 Oct","date":"2024-10-17","pcr":16.0,"vol_kt":22.4,"sig":-5.8,"mkt":12.6},{"label":"18 Oct","date":"2024-10-18","pcr":16.0,"vol_kt":25.3,"sig":-5.9,"mkt":12.8},{"label":"19 Oct","date":"2024-10-19","pcr":15.8,"vol_kt":18.3,"sig":-5.9,"mkt":12.8},{"label":"20 Oct","date":"2024-10-20","pcr":15.8,"vol_kt":14.4,"sig":-6.0,"mkt":12.9},{"label":"21 Oct","date":"2024-10-21","pcr":16.0,"vol_kt":24.3,"sig":-5.9,"mkt":12.7},{"label":"22 Oct","date":"2024-10-22","pcr":15.9,"vol_kt":24.7,"sig":-6.0,"mkt":12.8},{"label":"23 Oct","date":"2024-10-23","pcr":16.0,"vol_kt":22.8,"sig":-5.9,"mkt":12.8},{"label":"24 Oct","date":"2024-10-24","pcr":15.9,"vol_kt":23.4,"sig":-6.0,"mkt":12.7},{"label":"25 Oct","date":"2024-10-25","pcr":15.9,"vol_kt":24.3,"sig":-5.9,"mkt":12.6},{"label":"26 Oct","date":"2024-10-26","pcr":15.7,"vol_kt":17.9,"sig":-6.0,"mkt":12.8},{"label":"27 Oct","date":"2024-10-27","pcr":15.8,"vol_kt":16.3,"sig":-5.9,"mkt":12.9},{"label":"28 Oct","date":"2024-10-28","pcr":15.9,"vol_kt":23.3,"sig":-6.1,"mkt":12.8},{"label":"29 Oct","date":"2024-10-29","pcr":16.0,"vol_kt":24.3,"sig":-5.8,"mkt":12.8},{"label":"30 Oct","date":"2024-10-30","pcr":15.7,"vol_kt":23.4,"sig":-5.9,"mkt":12.8},{"label":"31 Oct","date":"2024-10-31","pcr":15.8,"vol_kt":23.3,"sig":-5.9,"mkt":12.9},{"label":"01 Nov","date":"2024-11-01","pcr":16.0,"vol_kt":24.1,"sig":-5.9,"mkt":12.6},{"label":"02 Nov","date":"2024-11-02","pcr":15.7,"vol_kt":16.6,"sig":-5.8,"mkt":12.8},{"label":"03 Nov","date":"2024-11-03","pcr":15.9,"vol_kt":14.9,"sig":-6.1,"mkt":12.9},{"label":"04 Nov","date":"2024-11-04","pcr":15.9,"vol_kt":21.6,"sig":-5.8,"mkt":12.8},{"label":"05 Nov","date":"2024-11-05","pcr":16.2,"vol_kt":24.6,"sig":-5.9,"mkt":12.8},{"label":"06 Nov","date":"2024-11-06","pcr":15.9,"vol_kt":22.9,"sig":-6.1,"mkt":12.9},{"label":"07 Nov","date":"2024-11-07","pcr":15.9,"vol_kt":19.6,"sig":-6.0,"mkt":12.7},{"label":"08 Nov","date":"2024-11-08","pcr":16.0,"vol_kt":22.8,"sig":-5.8,"mkt":12.6},{"label":"09 Nov","date":"2024-11-09","pcr":15.8,"vol_kt":17.7,"sig":-6.0,"mkt":12.7},{"label":"10 Nov","date":"2024-11-10","pcr":15.8,"vol_kt":15.5,"sig":-5.9,"mkt":12.9},{"label":"11 Nov","date":"2024-11-11","pcr":15.7,"vol_kt":22.3,"sig":-5.9,"mkt":12.8},{"label":"12 Nov","date":"2024-11-12","pcr":16.0,"vol_kt":22.8,"sig":-6.0,"mkt":12.7},{"label":"13 Nov","date":"2024-11-13","pcr":15.7,"vol_kt":22.1,"sig":-5.9,"mkt":12.9},{"label":"14 Nov","date":"2024-11-14","pcr":15.9,"vol_kt":25.3,"sig":-5.9,"mkt":12.7},{"label":"15 Nov","date":"2024-11-15","pcr":15.9,"vol_kt":21.3,"sig":-5.9,"mkt":12.6},{"label":"16 Nov","date":"2024-11-16","pcr":16.0,"vol_kt":16.2,"sig":-5.9,"mkt":12.8},{"label":"17 Nov","date":"2024-11-17","pcr":15.8,"vol_kt":15.0,"sig":-5.8,"mkt":12.9},{"label":"18 Nov","date":"2024-11-18","pcr":15.8,"vol_kt":22.8,"sig":-5.9,"mkt":13.1},{"label":"19 Nov","date":"2024-11-19","pcr":16.0,"vol_kt":22.7,"sig":-6.0,"mkt":13.0},{"label":"20 Nov","date":"2024-11-20","pcr":15.9,"vol_kt":21.1,"sig":-6.1,"mkt":12.7},{"label":"21 Nov","date":"2024-11-21","pcr":15.9,"vol_kt":23.1,"sig":-5.9,"mkt":13.0},{"label":"22 Nov","date":"2024-11-22","pcr":15.9,"vol_kt":23.1,"sig":-5.7,"mkt":12.9},{"label":"23 Nov","date":"2024-11-23","pcr":16.1,"vol_kt":14.1,"sig":-6.0,"mkt":12.8},{"label":"24 Nov","date":"2024-11-24","pcr":15.6,"vol_kt":15.9,"sig":-5.8,"mkt":12.8},{"label":"25 Nov","date":"2024-11-25","pcr":15.9,"vol_kt":20.9,"sig":-6.0,"mkt":12.9},{"label":"26 Nov","date":"2024-11-26","pcr":15.8,"vol_kt":23.3,"sig":-6.1,"mkt":12.9},{"label":"27 Nov","date":"2024-11-27","pcr":15.9,"vol_kt":23.6,"sig":-5.9,"mkt":12.6},{"label":"28 Nov","date":"2024-11-28","pcr":15.6,"vol_kt":20.6,"sig":-6.0,"mkt":12.8},{"label":"29 Nov","date":"2024-11-29","pcr":15.9,"vol_kt":22.6,"sig":-6.1,"mkt":12.7},{"label":"30 Nov","date":"2024-11-30","pcr":16.0,"vol_kt":15.2,"sig":-6.0,"mkt":12.8},{"label":"01 Dec","date":"2024-12-01","pcr":15.9,"vol_kt":17.4,"sig":-6.1,"mkt":12.7},{"label":"02 Dec","date":"2024-12-02","pcr":16.0,"vol_kt":23.5,"sig":-6.0,"mkt":12.7},{"label":"03 Dec","date":"2024-12-03","pcr":15.7,"vol_kt":21.9,"sig":-6.1,"mkt":13.1},{"label":"04 Dec","date":"2024-12-04","pcr":16.2,"vol_kt":21.9,"sig":-5.9,"mkt":12.9},{"label":"05 Dec","date":"2024-12-05","pcr":16.1,"vol_kt":21.5,"sig":-6.0,"mkt":13.1},{"label":"06 Dec","date":"2024-12-06","pcr":16.0,"vol_kt":24.1,"sig":-6.1,"mkt":12.8},{"label":"07 Dec","date":"2024-12-07","pcr":15.8,"vol_kt":16.5,"sig":-6.0,"mkt":13.0},{"label":"08 Dec","date":"2024-12-08","pcr":15.8,"vol_kt":15.3,"sig":-5.7,"mkt":13.1},{"label":"09 Dec","date":"2024-12-09","pcr":15.7,"vol_kt":21.9,"sig":-5.9,"mkt":12.9},{"label":"10 Dec","date":"2024-12-10","pcr":15.8,"vol_kt":22.2,"sig":-6.0,"mkt":13.0},{"label":"11 Dec","date":"2024-12-11","pcr":15.9,"vol_kt":24.2,"sig":-6.1,"mkt":12.9},{"label":"12 Dec","date":"2024-12-12","pcr":16.0,"vol_kt":22.2,"sig":-6.1,"mkt":13.1},{"label":"13 Dec","date":"2024-12-13","pcr":15.8,"vol_kt":21.3,"sig":-6.0,"mkt":12.8},{"label":"14 Dec","date":"2024-12-14","pcr":16.1,"vol_kt":12.5,"sig":-6.0,"mkt":12.8},{"label":"15 Dec","date":"2024-12-15","pcr":16.1,"vol_kt":17.2,"sig":-5.9,"mkt":13.1},{"label":"16 Dec","date":"2024-12-16","pcr":15.7,"vol_kt":21.4,"sig":-6.1,"mkt":12.9},{"label":"17 Dec","date":"2024-12-17","pcr":16.0,"vol_kt":21.3,"sig":-5.8,"mkt":12.7},{"label":"18 Dec","date":"2024-12-18","pcr":15.9,"vol_kt":19.4,"sig":-6.1,"mkt":13.1},{"label":"19 Dec","date":"2024-12-19","pcr":16.0,"vol_kt":23.1,"sig":-5.9,"mkt":13.0},{"label":"20 Dec","date":"2024-12-20","pcr":15.9,"vol_kt":22.4,"sig":-6.1,"mkt":12.8},{"label":"21 Dec","date":"2024-12-21","pcr":15.8,"vol_kt":15.4,"sig":-5.9,"mkt":13.0},{"label":"22 Dec","date":"2024-12-22","pcr":16.1,"vol_kt":15.3,"sig":-6.0,"mkt":13.3},{"label":"23 Dec","date":"2024-12-23","pcr":16.2,"vol_kt":21.4,"sig":-6.1,"mkt":12.8},{"label":"24 Dec","date":"2024-12-24","pcr":16.0,"vol_kt":20.8,"sig":-5.9,"mkt":13.0},{"label":"25 Dec","date":"2024-12-25","pcr":16.0,"vol_kt":22.5,"sig":-6.0,"mkt":12.9},{"label":"26 Dec","date":"2024-12-26","pcr":15.9,"vol_kt":21.8,"sig":-6.1,"mkt":13.1},{"label":"27 Dec","date":"2024-12-27","pcr":16.1,"vol_kt":21.0,"sig":-6.1,"mkt":12.8},{"label":"28 Dec","date":"2024-12-28","pcr":15.9,"vol_kt":13.2,"sig":-6.0,"mkt":12.9},{"label":"29 Dec","date":"2024-12-29","pcr":15.9,"vol_kt":16.2,"sig":-6.0,"mkt":13.0},{"label":"30 Dec","date":"2024-12-30","pcr":16.1,"vol_kt":22.3,"sig":-6.2,"mkt":13.1},{"label":"31 Dec","date":"2024-12-31","pcr":15.8,"vol_kt":20.1,"sig":-5.9,"mkt":13.1}],"regions":[{"key":"NA","name":"North America","color":"#2a78d6","vol_kt":3185.0,"pcr":16.0},{"key":"EU","name":"Europe","color":"#1D9E75","vol_kt":2416.0,"pcr":18.2},{"key":"APAC","name":"Asia Pacific","color":"#e8a020","vol_kt":2173.0,"pcr":18.7},{"key":"LATAM","name":"Latin America","color":"#D85A30","vol_kt":1066.0,"pcr":18.2},{"key":"MENA","name":"MENA","color":"#4a3aa7","vol_kt":548.0,"pcr":18.3}]};
-
 const $=id=>document.getElementById(id);
-const SCMAP={};
-DATA.companies.forEach(c=>SCMAP[c.id]=c);
+const SCMAP={};DATA.companies.forEach(c=>SCMAP[c.id]=c);
 
-/* ═══════════════════════════════════════
-   REACTIVE KPI ENGINE
-═══════════════════════════════════════ */
-let kpiMode='global'; // 'global' | 'region' | 'company'
-let kpiContext=null;  // region obj or company obj
-
-function computeRegionKPIs(regionKey){
-  let vol=0,pcrW=0,vchgW=0,reuseW=0;
-  DATA.companies.forEach(c=>{
-    const rv=c.region_vols[regionKey]||0;
-    vol+=rv; pcrW+=c.pcr24*rv; vchgW+=c.vchg*rv; reuseW+=c.reuse24*rv;
-  });
-  return{vol:Math.round(vol),pcr:(pcrW/vol).toFixed(1),vchg:(vchgW/vol).toFixed(1),reuse:(reuseW/vol).toFixed(1)};
+/* ═══ METRIC CARD EXPAND ═══ */
+function toggleMC(card,key){
+  const exp=card.querySelector('.mc-expand');
+  const isOpen=exp.classList.contains('show');
+  document.querySelectorAll('.mc-expand').forEach(e=>e.classList.remove('show'));
+  document.querySelectorAll('.metric-card').forEach(c=>c.classList.remove('open'));
+  document.querySelectorAll('.mc-toggle').forEach(t=>t.textContent='▼ What does this mean?');
+  if(!isOpen){
+    exp.classList.add('show');
+    card.classList.add('open');
+    card.querySelector('.mc-toggle').textContent='▲ Hide';
+  }
 }
 
-function updateKPIs(mode, entity){
-  kpiMode=mode; kpiContext=entity;
+/* ═══ REACTIVE KPIs ═══ */
+let kpiMode='global';
+function computeRegionKPIs(rk){
+  let vol=0,pcrW=0,vW=0,ruW=0;
+  DATA.companies.forEach(c=>{const v=c.region_vols[rk]||0;vol+=v;pcrW+=c.pcr24*v;vW+=c.vchg*v;ruW+=c.reuse24*v;});
+  return{vol:Math.round(vol),pcr:(pcrW/vol).toFixed(1),vchg:(vW/vol).toFixed(1),reuse:(ruW/vol).toFixed(1)};
+}
+function hl(id,on){$(id).classList.toggle('active',on);}
+function updateKPIs(mode,entity){
+  kpiMode=mode;
   const ctxBar=$('ctx-bar');
-  const highlight=(id,on)=>$(id).classList.toggle('active',on);
-
   if(mode==='global'){
-    $('kpi-vol-lbl').textContent='Total tracked volume (2024)';
-    $('kpi-vol-val').textContent='9,388kt';
-    $('kpi-vol-sub').textContent='metric tonnes';
-    $('kpi-vol-sub').style.color='var(--mu)';
-    $('kpi-sig-lbl').textContent='Signatory virgin plastic Δ';
-    $('kpi-sig-val').textContent='−6%';
-    $('kpi-sig-sub').textContent='vs global market +13%';
-    $('kpi-pcr-lbl').textContent='PCR content (2024 avg)';
-    $('kpi-pcr-val').textContent='16%';
-    $('kpi-pcr-sub').textContent='up from 5% in 2018 (3×)';
-    $('kpi-reu-lbl').textContent='Reusable packaging (2024)';
-    $('kpi-reu-val').textContent='1.2%';
-    $('kpi-reu-sub').textContent='target: 100% by 2025';
-    ['kpi-vol','kpi-sig','kpi-pcr','kpi-reu'].forEach(id=>highlight(id,false));
-    ctxBar.style.display='none';
-    return;
+    $('kpi-vol-lbl').textContent='Total tracked volume (2024)';$('kpi-vol-val').textContent='9,388kt';$('kpi-vol-sub').textContent='metric tonnes';$('kpi-vol-sub').style.color='var(--mu)';
+    $('kpi-sig-lbl').textContent='Signatory virgin plastic Δ';$('kpi-sig-val').textContent='−6%';$('kpi-sig-val').style.color='var(--gn)';$('kpi-sig-sub').textContent='vs global market +13%';$('kpi-sig-sub').style.color='var(--gn)';
+    $('kpi-pcr-lbl').textContent='PCR content (2024 avg)';$('kpi-pcr-val').textContent='16%';$('kpi-pcr-val').style.color='var(--bl)';$('kpi-pcr-sub').textContent='up from 5% in 2018 (3×)';$('kpi-pcr-sub').style.color='var(--bl)';
+    $('kpi-reu-lbl').textContent='Reusable packaging (2024)';$('kpi-reu-val').textContent='1.2%';$('kpi-reu-val').style.color='var(--rd)';$('kpi-reu-sub').textContent='target: 100% by 2025';$('kpi-reu-sub').style.color='var(--rd)';
+    ['kpi-vol','kpi-sig','kpi-pcr','kpi-reu'].forEach(id=>hl(id,false));
+    ctxBar.style.display='none';return;
   }
-
   if(mode==='region'){
-    const r=entity;
-    const kpis=computeRegionKPIs(r.key);
-    $('kpi-vol-lbl').textContent=`Volume · ${r.name}`;
-    $('kpi-vol-val').textContent=`${(kpis.vol/1000).toFixed(1)}M kt`;
-    $('kpi-vol-sub').textContent=`${((kpis.vol/9388)*100).toFixed(1)}% of total industry`;
-    $('kpi-vol-sub').style.color='var(--mu)';
-    const vc=parseFloat(kpis.vchg);
-    $('kpi-sig-lbl').textContent=`Virgin plastic Δ · ${r.name}`;
-    $('kpi-sig-val').textContent=`${vc>0?'+':''}${kpis.vchg}%`;
-    $('kpi-sig-sub').textContent=vc<=0?'Reducing ✓':'Increasing ✗';
-    $('kpi-sig-val').style.color=vc<=0?'var(--gn)':'var(--rd)';
-    $('kpi-sig-sub').style.color=vc<=0?'var(--gn)':'var(--rd)';
-    $('kpi-pcr-lbl').textContent=`PCR content · ${r.name}`;
-    $('kpi-pcr-val').textContent=`${kpis.pcr}%`;
-    $('kpi-pcr-sub').textContent=`Weighted avg across ${r.name} companies`;
-    $('kpi-reu-lbl').textContent=`Reuse · ${r.name}`;
-    $('kpi-reu-val').textContent=`${kpis.reuse}%`;
-    $('kpi-reu-sub').textContent='target: 100% by 2025';
-    ['kpi-vol','kpi-sig','kpi-pcr','kpi-reu'].forEach(id=>highlight(id,true));
-    $('ctx-icon').textContent='🌍';
-    $('ctx-text').innerHTML=`<b>Region filter:</b> ${r.name} — showing region-specific metrics`;
-    ctxBar.style.display='flex';
-    return;
+    const r=entity,k=computeRegionKPIs(r.key),vc=parseFloat(k.vchg),ru=parseFloat(k.reuse);
+    $('kpi-vol-lbl').textContent=`Volume · ${r.name}`;$('kpi-vol-val').textContent=`${(k.vol/1000).toFixed(1)}M kt`;$('kpi-vol-sub').textContent=`${((k.vol/9388)*100).toFixed(1)}% of total tracked`;$('kpi-vol-sub').style.color='var(--mu)';
+    $('kpi-sig-lbl').textContent=`Virgin plastic Δ · ${r.name}`;$('kpi-sig-val').textContent=`${vc>0?'+':''}${k.vchg}%`;$('kpi-sig-val').style.color=vc<=0?'var(--gn)':'var(--rd)';$('kpi-sig-sub').textContent=vc<=0?'Reducing ✓':'Increasing ✗';$('kpi-sig-sub').style.color=vc<=0?'var(--gn)':'var(--rd)';
+    $('kpi-pcr-lbl').textContent=`PCR content · ${r.name}`;$('kpi-pcr-val').textContent=`${k.pcr}%`;$('kpi-pcr-val').style.color='var(--bl)';$('kpi-pcr-sub').textContent=`Weighted avg in ${r.name}`;$('kpi-pcr-sub').style.color='var(--bl)';
+    $('kpi-reu-lbl').textContent=`Reuse · ${r.name}`;$('kpi-reu-val').textContent=`${k.reuse}%`;$('kpi-reu-val').style.color=ru>=3?'var(--gn)':'var(--rd)';$('kpi-reu-sub').textContent='target: 100% by 2025';$('kpi-reu-sub').style.color=ru>=3?'var(--gn)':'var(--rd)';
+    ['kpi-vol','kpi-sig','kpi-pcr','kpi-reu'].forEach(id=>hl(id,true));
+    $('ctx-icon').textContent='🌍';$('ctx-text').innerHTML=`<b>Region filter:</b> ${r.name} — showing region-specific metrics`;
+    ctxBar.style.display='flex';return;
   }
-
   if(mode==='company'){
-    const c=entity;
-    const vc=c.vchg;
-    $('kpi-vol-lbl').textContent=`Volume · ${c.name}`;
-    $('kpi-vol-val').textContent=`${c.kt24.toLocaleString()}kt`;
-    $('kpi-vol-sub').textContent=`${((c.kt24/9388)*100).toFixed(1)}% of total tracked`;
-    $('kpi-vol-sub').style.color='var(--mu)';
-    $('kpi-sig-lbl').textContent=`Virgin plastic Δ · ${c.name}`;
-    $('kpi-sig-val').textContent=`${vc>0?'+':''}${vc}%`;
-    $('kpi-sig-sub').textContent=vc<=0?'Reducing vs 2018 ✓':'Increasing vs 2018 ✗';
-    $('kpi-sig-val').style.color=vc<=0?'var(--gn)':'var(--rd)';
-    $('kpi-sig-sub').style.color=vc<=0?'var(--gn)':'var(--rd)';
-    $('kpi-pcr-lbl').textContent=`PCR content · ${c.name}`;
-    $('kpi-pcr-val').textContent=`${c.pcr24}%`;
-    $('kpi-pcr-sub').textContent=`up from ${c.pcr18}% in 2018 (+${c.pcr24-c.pcr18}pp)`;
-    $('kpi-reu-lbl').textContent=`Reusable packaging · ${c.name}`;
-    $('kpi-reu-val').textContent=`${c.reuse24}%`;
-    $('kpi-reu-sub').textContent=c.reuse24>=3?'Above average ✓':'Below average ✗';
-    $('kpi-reu-val').style.color=c.reuse24>=3?'var(--gn)':'var(--rd)';
-    $('kpi-reu-sub').style.color=c.reuse24>=3?'var(--gn)':'var(--rd)';
-    ['kpi-vol','kpi-sig','kpi-pcr','kpi-reu'].forEach(id=>highlight(id,true));
-    $('ctx-icon').textContent='🏢';
-    $('ctx-text').innerHTML=`<b>Company filter:</b> ${c.name} — showing company-specific metrics`;
-    ctxBar.style.display='flex';
-    return;
+    const c=entity,vc=c.vchg,ru=c.reuse24;
+    $('kpi-vol-lbl').textContent=`Volume · ${c.name}`;$('kpi-vol-val').textContent=`${c.kt24.toLocaleString()}kt`;$('kpi-vol-sub').textContent=`${((c.kt24/9388)*100).toFixed(1)}% of total tracked`;$('kpi-vol-sub').style.color='var(--mu)';
+    $('kpi-sig-lbl').textContent=`Virgin plastic Δ · ${c.name}`;$('kpi-sig-val').textContent=`${vc>0?'+':''}${vc}%`;$('kpi-sig-val').style.color=vc<=0?'var(--gn)':'var(--rd)';$('kpi-sig-sub').textContent=vc<=0?'Reducing vs 2018 ✓':'Increasing vs 2018 ✗';$('kpi-sig-sub').style.color=vc<=0?'var(--gn)':'var(--rd)';
+    $('kpi-pcr-lbl').textContent=`PCR content · ${c.name}`;$('kpi-pcr-val').textContent=`${c.pcr24}%`;$('kpi-pcr-val').style.color='var(--bl)';$('kpi-pcr-sub').textContent=`up from ${c.pcr18}% in 2018 (+${c.pcr24-c.pcr18}pp)`;$('kpi-pcr-sub').style.color='var(--bl)';
+    $('kpi-reu-lbl').textContent=`Reusable packaging · ${c.name}`;$('kpi-reu-val').textContent=`${ru}%`;$('kpi-reu-val').style.color=ru>=3?'var(--gn)':'var(--rd)';$('kpi-reu-sub').textContent=ru>=3?'Above average ✓':'Below average ✗';$('kpi-reu-sub').style.color=ru>=3?'var(--gn)':'var(--rd)';
+    ['kpi-vol','kpi-sig','kpi-pcr','kpi-reu'].forEach(id=>hl(id,true));
+    $('ctx-icon').textContent='🏢';$('ctx-text').innerHTML=`<b>Company filter:</b> ${c.name} — showing company metrics`;
+    ctxBar.style.display='flex';return;
   }
 }
-
 function resetKPIs(){
-  updateKPIs('global',null);
-  // clear region selection
-  activeReg='all';
-  document.querySelectorAll('#rf .btn').forEach(b=>b.classList.toggle('a',b.dataset.sector==='all'));
+  updateKPIs('global',null);activeReg='all';selCo=null;
+  document.querySelectorAll('#rf .btn').forEach(b=>b.classList.toggle('a',b.textContent==='All regions'));
   document.querySelectorAll('.rg-card').forEach(c=>c.classList.remove('sel'));
-  selCo=null; $('vol-co').style.display='none';
-  buildVolChart();
+  $('vol-co').style.display='none';buildVolChart();
 }
 
-/* ═══════════════════════════════════════
-   PANEL 1 — VOLUME EXPLORER
-═══════════════════════════════════════ */
-let activeSec='all', activeReg='all', activeSort='vol', selCo=null, volChart;
-
-function buildSectorFilters(){
-  const sectors=['all','Beverages','Food & Bev.','Food','HPC','Cosmetics'];
-  const el=$('sf'); el.innerHTML='<span style="font-size:10px;color:var(--mu);">Sector:</span>';
-  sectors.forEach(s=>{
-    const b=document.createElement('button');
-    b.className='btn'+(s==='all'?' a':'');
-    b.textContent=s==='all'?'All':s;
+/* ═══ PANEL 1 ═══ */
+let activeSec='all',activeReg='all',activeSort='vol',selCo=null,volChart;
+(function buildSF(){
+  const el=$('sf');el.innerHTML='<span style="font-size:10px;color:var(--mu);">Sector:</span>';
+  ['all','Beverages','Food & Bev.','Food','HPC','Cosmetics'].forEach(s=>{
+    const b=document.createElement('button');b.className='btn'+(s==='all'?' a':'');b.textContent=s==='all'?'All':s;
     b.onclick=()=>{document.querySelectorAll('#sf .btn').forEach(x=>x.classList.remove('a'));b.classList.add('a');activeSec=s;selCo=null;$('vol-co').style.display='none';buildVolChart();};
     el.appendChild(b);
   });
-}
-function buildRegionFilters(){
-  const el=$('rf'); el.innerHTML='<span style="font-size:10px;color:var(--mu);">Region:</span>';
+})();
+(function buildRF(){
+  const el=$('rf');el.innerHTML='<span style="font-size:10px;color:var(--mu);">Region:</span>';
   [['all','All regions'],...DATA.regions.map(r=>[r.key,r.name])].forEach(([k,n])=>{
-    const b=document.createElement('button');
-    b.className='btn'+(k==='all'?' a':'');
-    b.dataset.sector=k==='all'?'all':'';
-    b.textContent=n;
+    const b=document.createElement('button');b.className='btn'+(k==='all'?' a':'');b.textContent=n;
     b.onclick=()=>{
       document.querySelectorAll('#rf .btn').forEach(x=>x.classList.remove('a'));b.classList.add('a');
-      activeReg=k; selCo=null; $('vol-co').style.display='none'; buildVolChart();
+      activeReg=k;selCo=null;$('vol-co').style.display='none';buildVolChart();
       if(k==='all'){updateKPIs('global',null);document.querySelectorAll('.rg-card').forEach(c=>c.classList.remove('sel'));}
       else{const r=DATA.regions.find(x=>x.key===k);updateKPIs('region',r);document.querySelectorAll('.rg-card').forEach(c=>c.classList.toggle('sel',c.dataset.key===k));}
     };
     el.appendChild(b);
   });
-}
-buildSectorFilters(); buildRegionFilters();
-
-function getVolData(){
+})();
+function getVD(){
   let d=[...DATA.companies];
-  if(activeSec!=='all') d=d.filter(c=>c.sector===activeSec);
-  if(activeReg!=='all') d=d.map(c=>({...c,_vol:c.region_vols[activeReg]||0})).filter(c=>c._vol>0);
-  else d=d.map(c=>({...c,_vol:c.kt24}));
-  if(activeSort==='az') d.sort((a,b)=>a.name.localeCompare(b.name));
-  else d.sort((a,b)=>b._vol-a._vol);
-  return d;
+  if(activeSec!=='all')d=d.filter(c=>c.sector===activeSec);
+  d=activeReg!=='all'?d.map(c=>({...c,_v:c.region_vols[activeReg]||0})).filter(c=>c._v>0):d.map(c=>({...c,_v:c.kt24}));
+  return activeSort==='az'?d.sort((a,b)=>a.name.localeCompare(b.name)):d.sort((a,b)=>b._v-a._v);
 }
-
 function buildVolChart(){
-  const d=getVolData();
-  const h=Math.max(160,d.length*33+60);
-  $('vol-chart').parentElement.style.height=h+'px';
-  const cols=d.map(c=>(selCo&&c.name!==selCo)?c.color+'55':c.color);
-  if(volChart) volChart.destroy();
-  volChart=new Chart($('vol-chart'),{
-    type:'bar',
-    data:{labels:d.map(c=>c.name),datasets:[{label:'Volume (kt)',data:d.map(c=>c._vol),backgroundColor:cols,borderRadius:4,borderSkipped:false}]},
+  const d=getVD();const h=Math.max(160,d.length*33+60);$('vol-chart').parentElement.style.height=h+'px';
+  const cols=d.map(c=>(selCo&&c.name!==selCo)?c.color+'44':c.color);
+  if(volChart)volChart.destroy();
+  volChart=new Chart($('vol-chart'),{type:'bar',data:{labels:d.map(c=>c.name),datasets:[{label:'Volume (kt)',data:d.map(c=>c._v),backgroundColor:cols,borderRadius:4,borderSkipped:false}]},
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
       onClick:(e,els)=>{
         if(!els.length){selCo=null;$('vol-co').style.display='none';if(kpiMode==='company')updateKPIs('global',null);buildVolChart();return;}
         const co=d[els[0].index];selCo=co.name;buildVolChart();
-        const pct=(co._vol/9388*100).toFixed(1);
-        $('vol-co').innerHTML=`<b>${co.name}</b> — ${co._vol.toLocaleString()}kt (${pct}% of total)${activeReg!=='all'?' in '+DATA.regions.find(r=>r.key===activeReg)?.name:''} · <span style="cursor:pointer;text-decoration:underline;" onclick="selCo=null;$('vol-co').style.display='none';buildVolChart();">Clear</span>`;
+        $('vol-co').innerHTML=`<b>${co.name}</b> — ${co._v.toLocaleString()}kt${activeReg!=='all'?' in '+DATA.regions.find(r=>r.key===activeReg)?.name:''} (${((co._v/9388)*100).toFixed(1)}% of total) · <span style="cursor:pointer;text-decoration:underline;" onclick="selCo=null;$('vol-co').style.display='none';buildVolChart();">Clear</span>`;
         $('vol-co').style.display='block';
         if(SCMAP[co.id]){$('co-a').value=co.id;renderSC();}
         updateKPIs('company',co);
@@ -385,36 +355,29 @@ function buildVolChart(){
 buildVolChart();
 function setSort(s,btn){activeSort=s;document.querySelectorAll('#sort-tog .vb').forEach(b=>b.classList.toggle('a',b===btn));buildVolChart();}
 
-/* ═══════════════════════════════════════
-   PANEL 2 — TREND EXPLORER
-═══════════════════════════════════════ */
+/* ═══ PANEL 2 TREND ═══ */
 let gran='yearly',metOn={pcr:true,vol:true,sig:true,mkt:true},trendChart,animTimer=null;
-
-function getGranData(){
-  const yr=parseInt($('yr-sel')?$('yr-sel').value:'2024')||2024;
-  if(gran==='daily')    return DATA.daily;
-  if(gran==='weekly')   return DATA.weekly;
-  if(gran==='monthly')  return DATA.monthly.filter(r=>r.year===yr);
-  if(gran==='quarterly')return DATA.quarterly;
-  return DATA.yearly;
+function getGD(){
+  const yr=parseInt(($('yr-sel')||{value:'2024'}).value)||2024;
+  if(gran==='daily')return DATA.daily;if(gran==='weekly')return DATA.weekly;
+  if(gran==='monthly')return DATA.monthly.filter(r=>r.year===yr);
+  if(gran==='quarterly')return DATA.quarterly;return DATA.yearly;
 }
-
-function buildTrendChart(sliceLen){
+function buildTrendChart(sl){
   if(animTimer){clearInterval(animTimer);animTimer=null;}
-  let rows=getGranData();
-  if(sliceLen) rows=rows.slice(0,sliceLen);
+  let rows=getGD();if(sl)rows=rows.slice(0,sl);
   const step=rows.length>60?Math.ceil(rows.length/60):1;
-  const filt=rows.filter((_,i)=>i%step===0||i===rows.length-1);
+  const f=rows.filter((_,i)=>i%step===0||i===rows.length-1);
   const ds=[
-    {label:'PCR %',data:filt.map(r=>r.pcr),borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,.08)',fill:true,borderWidth:2,tension:.3,pointRadius:rows.length>30?0:5,pointBackgroundColor:'#1D9E75',pointBorderColor:'#fff',pointBorderWidth:1.5,hidden:!metOn.pcr,yAxisID:'yL'},
-    {label:'Volume (kt)',data:filt.map(r=>r.vol_kt),borderColor:'#2a78d6',fill:false,borderWidth:1.5,tension:.3,pointRadius:0,hidden:!metOn.vol,yAxisID:'yR',borderDash:[4,3]},
-    {label:'Signatory Δ%',data:filt.map(r=>r.sig),borderColor:'#0f6e56',borderWidth:2,tension:.3,fill:false,pointRadius:rows.length>30?0:4,pointBackgroundColor:'#0f6e56',pointBorderColor:'#fff',pointBorderWidth:1.5,hidden:!metOn.sig,yAxisID:'yL',borderDash:[3,2]},
-    {label:'Market Δ%',data:filt.map(r=>r.mkt),borderColor:'#D85A30',borderWidth:2,tension:.3,fill:false,pointRadius:rows.length>30?0:4,pointBackgroundColor:'#D85A30',pointBorderColor:'#fff',pointBorderWidth:1.5,hidden:!metOn.mkt,yAxisID:'yL',borderDash:[5,3]},
+    {label:'PCR %',data:f.map(r=>r.pcr),borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,.08)',fill:true,borderWidth:2,tension:.3,pointRadius:rows.length>30?0:5,pointBackgroundColor:'#1D9E75',pointBorderColor:'#fff',pointBorderWidth:1.5,hidden:!metOn.pcr,yAxisID:'yL'},
+    {label:'Volume kt',data:f.map(r=>r.vol_kt),borderColor:'#2a78d6',fill:false,borderWidth:1.5,tension:.3,pointRadius:0,hidden:!metOn.vol,yAxisID:'yR',borderDash:[4,3]},
+    {label:'Signatory Δ%',data:f.map(r=>r.sig),borderColor:'#0f6e56',borderWidth:2,tension:.3,fill:false,pointRadius:rows.length>30?0:4,pointBackgroundColor:'#0f6e56',pointBorderColor:'#fff',pointBorderWidth:1.5,hidden:!metOn.sig,yAxisID:'yL',borderDash:[3,2]},
+    {label:'Market Δ%',data:f.map(r=>r.mkt),borderColor:'#D85A30',borderWidth:2,tension:.3,fill:false,pointRadius:rows.length>30?0:4,pointBackgroundColor:'#D85A30',pointBorderColor:'#fff',pointBorderWidth:1.5,hidden:!metOn.mkt,yAxisID:'yL',borderDash:[5,3]},
   ];
-  if(trendChart) trendChart.destroy();
-  trendChart=new Chart($('trend-chart'),{type:'line',data:{labels:filt.map(r=>r.label||r.year),datasets:ds},
+  if(trendChart)trendChart.destroy();
+  trendChart=new Chart($('trend-chart'),{type:'line',data:{labels:f.map(r=>r.label||r.year),datasets:ds},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7f74',font:{size:9},boxWidth:8,padding:8}},tooltip:{mode:'index',intersect:false}},
+      plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7f74',font:{size:9},boxWidth:8,padding:7}},tooltip:{mode:'index',intersect:false}},
       scales:{yL:{position:'left',grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:9},callback:v=>(v>=0?'+':'')+v+'%'}},yR:{position:'right',grid:{display:false},ticks:{color:'#2a78d6',font:{size:9},callback:v=>v+'kt'}},x:{grid:{display:false},ticks:{color:'#6b7f74',font:{size:9},maxRotation:30,maxTicksLimit:12}}},
       animation:{duration:400}}
   });
@@ -423,134 +386,91 @@ buildTrendChart();
 function setGran(g,btn){
   gran=g;
   document.querySelectorAll('.cr .btn').forEach(b=>{if(b.onclick&&b.onclick.toString().includes('setGran'))b.classList.remove('a');});
-  btn.classList.add('a');
-  $('yr-row').style.display=['daily','weekly','monthly'].includes(g)?'flex':'none';
-  buildTrendChart();
+  btn.classList.add('a');$('yr-row').style.display=['daily','weekly','monthly'].includes(g)?'flex':'none';buildTrendChart();
 }
-function togMet(k,btn){metOn[k]=!metOn[k];btn.classList.toggle('a',metOn[k]);if(trendChart){const idx={pcr:0,vol:1,sig:2,mkt:3}[k];trendChart.data.datasets[idx].hidden=!metOn[k];trendChart.update();}}
-function animTrend(){const rows=getGranData();let i=2;buildTrendChart(i);animTimer=setInterval(()=>{i+=Math.max(1,Math.floor(rows.length/20));if(i>=rows.length){clearInterval(animTimer);animTimer=null;buildTrendChart();return;}buildTrendChart(i);},120);}
-setTimeout(()=>{$('br1').style.width='72%';$('br2').style.width='68%';$('br3').style.width='1.2%';},600);
+function togMet(k,btn){metOn[k]=!metOn[k];btn.classList.toggle('a',metOn[k]);if(trendChart){const i={pcr:0,vol:1,sig:2,mkt:3}[k];trendChart.data.datasets[i].hidden=!metOn[k];trendChart.update();}}
+function animTrend(){const rows=getGD();let i=2;buildTrendChart(i);animTimer=setInterval(()=>{i+=Math.max(1,Math.floor(rows.length/20));if(i>=rows.length){clearInterval(animTimer);animTimer=null;buildTrendChart();return;}buildTrendChart(i);},120);}
+setTimeout(()=>{$('br1').style.width='72%';$('br2').style.width='68%';$('br3').style.width='1.2%';},700);
 
-/* ═══════════════════════════════════════
-   PANEL 3 — REGIONAL BREAKDOWN
-═══════════════════════════════════════ */
-function buildRegionPanel(){
+/* ═══ PANEL 3 REGIONAL ═══ */
+(function buildRgPanel(){
   const cards=$('rg-cards');
   DATA.regions.forEach(r=>{
     const card=document.createElement('div');
-    card.className='rg-card'; card.dataset.key=r.key;
-    card.style.cssText=`background:${r.color}15;border-color:${r.color}55;`;
+    card.className='rg-card';card.dataset.key=r.key;
+    card.style.cssText=`background:${r.color}12;border-color:${r.color}66;`;
     card.innerHTML=`<div class="rg-name">${r.name}</div><div class="rg-vol" style="color:${r.color}">${(r.vol_kt/1000).toFixed(1)}M kt</div><div class="rg-pcr" style="color:${r.color}">PCR: ${r.pcr}%</div>`;
     card.onclick=()=>{
-      const wasSelected=card.classList.contains('sel');
+      const was=card.classList.contains('sel');
       document.querySelectorAll('.rg-card').forEach(c=>c.classList.remove('sel'));
-      if(wasSelected){
-        // deselect — go back to global
+      if(was){
         activeReg='all';
         document.querySelectorAll('#rf .btn').forEach(b=>b.classList.toggle('a',b.textContent==='All regions'));
-        updateKPIs('global',null); buildVolChart();
+        updateKPIs('global',null);buildVolChart();
       } else {
-        card.classList.add('sel');
+        card.classList.add('sel');card.style.borderColor=r.color;
         activeReg=r.key;
         document.querySelectorAll('#rf .btn').forEach(b=>b.classList.toggle('a',b.textContent===r.name));
-        updateKPIs('region',r); buildVolChart();
+        updateKPIs('region',r);buildVolChart();
       }
     };
     cards.appendChild(card);
   });
-
   new Chart($('rg-chart'),{type:'bar',
-    data:{labels:DATA.regions.map(r=>r.name),
-      datasets:[
-        {label:'Volume (kt)',data:DATA.regions.map(r=>r.vol_kt),backgroundColor:DATA.regions.map(r=>r.color+'bb'),borderRadius:4,yAxisID:'yL'},
-        {label:'PCR % →',data:DATA.regions.map(r=>r.pcr),type:'line',borderColor:DATA.regions.map(r=>r.color),backgroundColor:'transparent',borderWidth:2.5,pointRadius:6,pointBackgroundColor:DATA.regions.map(r=>r.color),pointBorderColor:'#fff',pointBorderWidth:2,fill:false,tension:.3,yAxisID:'yR'},
-      ]},
+    data:{labels:DATA.regions.map(r=>r.name),datasets:[
+      {label:'Volume (kt)',data:DATA.regions.map(r=>r.vol_kt),backgroundColor:DATA.regions.map(r=>r.color+'bb'),borderRadius:4,yAxisID:'yL'},
+      {label:'PCR % →',data:DATA.regions.map(r=>r.pcr),type:'line',borderColor:DATA.regions.map(r=>r.color),backgroundColor:'transparent',borderWidth:2.5,pointRadius:6,pointBackgroundColor:DATA.regions.map(r=>r.color),pointBorderColor:'#fff',pointBorderWidth:2,fill:false,tension:.3,yAxisID:'yR'},
+    ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
       scales:{yL:{position:'left',grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:10},callback:v=>(v/1000).toFixed(1)+'M'}},yR:{position:'right',min:10,max:25,grid:{display:false},ticks:{color:'#6b7f74',font:{size:10},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{color:'#1a2b22',font:{size:10}}}}}
   });
-}
-buildRegionPanel();
+})();
 
-/* ═══════════════════════════════════════
-   PANEL 4 — SCORECARD
-═══════════════════════════════════════ */
+/* ═══ PANEL 4 SCORECARD ═══ */
 let cmpMode=false,vmMode='bar',scChart;
-const NOTES={
-  'coca-cola':'Coca-Cola reached 100% RRC design and raised PCR 9%→18%. However, virgin plastic is +10% above its 2019 baseline — the largest absolute increase given its 3,606kt footprint.',
-  'pepsico':'PepsiCo (2,095kt) shows modest progress: PCR 3%→11%, virgin −5%. RRC barely moved (77%→78%). No reuse data reported.',
-  'nestle':'Nestlé: PCR 2%→30%, RRC 65%→82%, virgin −21%. One of the top food-sector performers.',
-  'danone':'Danone: virgin −17%, PCR 7%→17%. RRC stagnated at 76%. Reuse at 4% — above average for food.',
-  'unilever':'Unilever leads virgin reduction (−23%). RRC and PCR broadly improved. Reuse near zero (0.1%).',
-  'henkel':'Henkel: RRC 75%→80%, PCR 8%→15%, virgin −18%. Strong European HPC performer.',
-  'colgate':'Colgate-P.: RRC 57%→76%, PCR 6%→21%, virgin −27%. Well-rounded HPC performer.',
-  'mars':'Mars started from the weakest 2018 baseline (19% RRC, 0% PCR). +1% virgin increase and zero reuse show early-stage transformation.',
-  'mondelez':'Mondelēz: PCR 3%→12%, RRC 65%→70%, virgin −8%. Moderate across-the-board progress.',
-  'reckitt':'Reckitt: RRC 60%→72%, PCR 5%→18%, virgin −15%. Solid HPC midfield performer.',
-  'loreal':"L'Oréal: PCR 5%→37% and reuse 6% — best in class on both. RRC design stagnated at 49%.",
-  'sc-johnson':'SC Johnson: −33% virgin (largest reduction), 10% reuse (highest), PCR 5%→25%. The standout performer across all metrics.',
-  'kellanova':'Kellanova: PCR 3%→10%, RRC 60%→68%, virgin −3%. Limited progress.',
-  'friesland':'FrieslandCampina: RRC 52%→55%, PCR 4%→8%. Primarily European dairy with smaller footprint.',
-  'diageo':'Diageo: Started strong (RRC 80%, PCR 12%). Maintained RRC 85%, PCR 22%, virgin −12%.',
-  'essity':'Essity: RRC 68%→74%, PCR 9%→14%, virgin −8%. Tissue/hygiene limits circular design options.',
-};
-
+const NOTES={'coca-cola':'Reached 100% RRC and raised PCR 9%→18%, but virgin plastic is +10% above its 2019 baseline — the largest absolute increase given its 3,606kt footprint. High volume makes even small percentage increases significant.',
+'pepsico':'2nd largest volume (2,095kt). PCR improved 3%→11%, virgin −5%. RRC barely moved (77%→78%). No reuse data reported.',
+'nestle':'PCR 2%→30%, RRC 65%→82%, virgin −21%. One of the top food-sector performers across all metrics.',
+'danone':'Virgin −17%, PCR 7%→17%. RRC stagnated at 76%. Reuse at 4% — above average for food companies.',
+'unilever':'Leads on virgin reduction (−23%). RRC and PCR broadly improved. Reuse near zero (0.1%).',
+'henkel':'RRC 75%→80%, PCR 8%→15%, virgin −18%. Strong European HPC performer.',
+'colgate':'RRC 57%→76%, PCR 6%→21%, virgin −27%. Well-rounded HPC performer.',
+'mars':'Started from the weakest 2018 baseline (19% RRC, 0% PCR). +1% virgin increase and zero reuse show early-stage transformation.',
+'mondelez':'PCR 3%→12%, RRC 65%→70%, virgin −8%. Moderate across-the-board progress.',
+'reckitt':'RRC 60%→72%, PCR 5%→18%, virgin −15%. Solid HPC midfield performer.',
+'loreal':"PCR 5%→37% and reuse 6% — best-in-class on both. RRC stagnated at 49%.",
+'sc-johnson':'−33% virgin (largest reduction), 10% reuse (highest), PCR 5%→25%. Standout performer across all metrics.',
+'kellanova':'PCR 3%→10%, RRC 60%→68%, virgin −3%. Limited progress overall.',
+'friesland':'RRC 52%→55%, PCR 4%→8%. Primarily European dairy with smaller footprint.',
+'diageo':'Started strong (RRC 80%, PCR 12%). Maintained RRC 85%, PCR 22%, virgin −12%.',
+'essity':'RRC 68%→74%, PCR 9%→14%, virgin −8%. Tissue/hygiene formats limit circular design options.'};
 function togCmp(){cmpMode=!cmpMode;$('co-b-row').style.display=cmpMode?'flex':'none';$('cmp-btn').textContent=cmpMode?'− Remove':'+ Compare';$('cmp-btn').classList.toggle('ar',cmpMode);renderSC();}
 function setVM(m,btn){vmMode=m;document.querySelectorAll('.vtog .vb').forEach(b=>b.classList.toggle('a',b===btn));renderSC();}
-
 function renderSC(){
-  const idA=$('co-a').value, dA=SCMAP[idA];
-  const idB=cmpMode?$('co-b').value:null, dB=idB?SCMAP[idB]:null;
-  if(!dA) return;
-
-  // Update KPIs to this company (unless a region is also active — company takes priority)
-  updateKPIs('company', dA);
-
-  // Stat cards
+  const idA=$('co-a').value,dA=SCMAP[idA];if(!dA)return;
+  const idB=cmpMode?$('co-b').value:null,dB=idB?SCMAP[idB]:null;
+  updateKPIs('company',dA);
   const cards=$('sc-cards');
   if(!cmpMode){
-    const vc=dA.vchg<=0?'var(--gn)':'var(--rd)';
-    cards.style.display='grid';
-    cards.innerHTML=`
-      <div class="sc" onclick="hlMet(0,this)"><div class="sk">RRC % (2024)</div><div class="sn" style="color:var(--gn)">${dA.rrc24}%</div><div class="sd" style="color:var(--mu)">was ${dA.rrc18}% (+${dA.rrc24-dA.rrc18}pp)</div></div>
-      <div class="sc" onclick="hlMet(1,this)"><div class="sk">PCR % (2024)</div><div class="sn" style="color:var(--bl)">${dA.pcr24}%</div><div class="sd" style="color:var(--mu)">was ${dA.pcr18}% (+${dA.pcr24-dA.pcr18}pp)</div></div>
-      <div class="sc" onclick="hlMet(2,this)"><div class="sk">Virgin plastic Δ</div><div class="sn" style="color:${vc}">${dA.vchg>0?'+':''}${dA.vchg}%</div><div class="sd" style="color:var(--mu)">vs 2018 baseline</div></div>
-      <div class="sc" onclick="hlMet(3,this)"><div class="sk">Reuse (2024)</div><div class="sn" style="color:${dA.reuse24>=3?'var(--gn)':'var(--rd)'}">${dA.reuse24}%</div><div class="sd" style="color:var(--mu)">target: 100%</div></div>`;
-  } else { cards.style.display='none'; }
-
+    const vc=dA.vchg<=0?'var(--gn)':'var(--rd)';cards.style.display='grid';
+    cards.innerHTML=`<div class="sc" onclick="hlM(0,this)"><div class="sk">RRC % (2024)</div><div class="sn" style="color:var(--gn)">${dA.rrc24}%</div><div class="sd" style="color:var(--mu)">was ${dA.rrc18}% (+${dA.rrc24-dA.rrc18}pp)</div></div><div class="sc" onclick="hlM(1,this)"><div class="sk">PCR % (2024)</div><div class="sn" style="color:var(--bl)">${dA.pcr24}%</div><div class="sd" style="color:var(--mu)">was ${dA.pcr18}% (+${dA.pcr24-dA.pcr18}pp)</div></div><div class="sc" onclick="hlM(2,this)"><div class="sk">Virgin plastic Δ</div><div class="sn" style="color:${vc}">${dA.vchg>0?'+':''}${dA.vchg}%</div><div class="sd" style="color:var(--mu)">vs 2018 baseline</div></div><div class="sc" onclick="hlM(3,this)"><div class="sk">Reuse (2024)</div><div class="sn" style="color:${dA.reuse24>=3?'var(--gn)':'var(--rd)'}">${dA.reuse24}%</div><div class="sd" style="color:var(--mu)">target: 100%</div></div>`;
+  } else{cards.style.display='none';}
   $('sc-co').innerHTML=cmpMode&&dB?`Comparing <b>${dA.name}</b> vs <b>${dB.name}</b>.`:`<b>${dA.name}:</b> ${NOTES[idA]||''}`;
-  if(scChart) scChart.destroy();
-  if(vmMode==='radar') buildRadar(dA,dB); else buildBar(dA,dB);
+  if(scChart)scChart.destroy();
+  if(vmMode==='radar')buildRadar(dA,dB);else buildBar(dA,dB);
 }
-
 function buildBar(dA,dB){
-  const labels=['RRC %','PCR %','Reuse %'];
-  const ds=!cmpMode?[
-    {label:'2018 baseline',data:[dA.rrc18,dA.pcr18,0],backgroundColor:'rgba(29,158,117,.28)',borderRadius:4,borderSkipped:false},
-    {label:'2024 actual',data:[dA.rrc24,dA.pcr24,dA.reuse24],backgroundColor:dA.color||'#1D9E75',borderRadius:4,borderSkipped:false},
-  ]:[
-    {label:dA.name,data:[dA.rrc24,dA.pcr24,dA.reuse24],backgroundColor:dA.color||'#1D9E75',borderRadius:4,borderSkipped:false},
-    {label:dB.name,data:[dB.rrc24,dB.pcr24,dB.reuse24],backgroundColor:dB.color||'#2a78d6',borderRadius:4,borderSkipped:false},
-  ];
-  scChart=new Chart($('sc-chart'),{type:'bar',data:{labels,datasets:ds},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7f74',font:{size:10},boxWidth:9,padding:8}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},
-      scales:{y:{min:0,max:105,grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:10},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{color:'#1a2b22',font:{size:10}}}},animation:{duration:400}}
-  });
+  const ds=!cmpMode?[{label:'2018 baseline',data:[dA.rrc18,dA.pcr18,0],backgroundColor:'rgba(29,158,117,.28)',borderRadius:4,borderSkipped:false},{label:'2024 actual',data:[dA.rrc24,dA.pcr24,dA.reuse24],backgroundColor:dA.color||'#1D9E75',borderRadius:4,borderSkipped:false}]:[{label:dA.name,data:[dA.rrc24,dA.pcr24,dA.reuse24],backgroundColor:dA.color,borderRadius:4,borderSkipped:false},{label:dB.name,data:[dB.rrc24,dB.pcr24,dB.reuse24],backgroundColor:dB.color,borderRadius:4,borderSkipped:false}];
+  scChart=new Chart($('sc-chart'),{type:'bar',data:{labels:['RRC %','PCR %','Reuse %'],datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7f74',font:{size:10},boxWidth:9,padding:8}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},scales:{y:{min:0,max:105,grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:10},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{color:'#1a2b22',font:{size:10}}}},animation:{duration:400}}});
 }
 function buildRadar(dA,dB){
-  function norm(d){return[d.rrc24,Math.min(100,d.pcr24*2.5),Math.min(100,d.reuse24*10),Math.min(100,Math.max(0,-d.vchg*3))];}
-  const ds=[{label:dA.name,data:norm(dA),borderColor:dA.color,backgroundColor:dA.color+'28',borderWidth:2,pointRadius:4,pointBackgroundColor:dA.color}];
-  if(dB) ds.push({label:dB.name,data:norm(dB),borderColor:dB.color,backgroundColor:dB.color+'28',borderWidth:2,pointRadius:4,pointBackgroundColor:dB.color});
-  scChart=new Chart($('sc-chart'),{type:'radar',data:{labels:['RRC design','PCR content','Reuse (×10)','Virgin reduction'],datasets:ds},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7f74',font:{size:10},boxWidth:9,padding:8}}},
-      scales:{r:{min:0,max:100,grid:{color:'#e4ede8'},angleLines:{color:'#e4ede8'},pointLabels:{font:{size:9},color:'#6b7f74'},ticks:{display:false}}},animation:{duration:400}}
-  });
+  function n(d){return[d.rrc24,Math.min(100,d.pcr24*2.5),Math.min(100,d.reuse24*10),Math.min(100,Math.max(0,-d.vchg*3))];}
+  const ds=[{label:dA.name,data:n(dA),borderColor:dA.color,backgroundColor:dA.color+'28',borderWidth:2,pointRadius:4,pointBackgroundColor:dA.color}];
+  if(dB)ds.push({label:dB.name,data:n(dB),borderColor:dB.color,backgroundColor:dB.color+'28',borderWidth:2,pointRadius:4,pointBackgroundColor:dB.color});
+  scChart=new Chart($('sc-chart'),{type:'radar',data:{labels:['RRC design','PCR content','Reuse (×10)','Virgin reduction'],datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7f74',font:{size:10},boxWidth:9,padding:8}}},scales:{r:{min:0,max:100,grid:{color:'#e4ede8'},angleLines:{color:'#e4ede8'},pointLabels:{font:{size:9},color:'#6b7f74'},ticks:{display:false}}},animation:{duration:400}}});
 }
-function hlMet(idx,card){
-  document.querySelectorAll('.sc').forEach((c,i)=>c.classList.toggle('hl',i===idx));
-  if(scChart){scChart.data.datasets.forEach(ds=>{const b=ds._b||(ds._b=[].concat(ds.backgroundColor));ds.backgroundColor=b.map((c,i)=>typeof c==='string'?(i===idx?c:c+'99'):c);});scChart.update();}
-}
-
+function hlM(idx,card){document.querySelectorAll('.sc').forEach((c,i)=>c.classList.toggle('hl',i===idx));if(scChart){scChart.data.datasets.forEach(ds=>{const b=ds._b||(ds._b=[].concat(ds.backgroundColor));ds.backgroundColor=b.map((c,i)=>typeof c==='string'?(i===idx?c:c+'99'):c);});scChart.update();}}
 renderSC();
 </script>
 </body>
