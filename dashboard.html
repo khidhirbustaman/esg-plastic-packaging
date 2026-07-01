@@ -416,15 +416,49 @@ setTimeout(()=>{$('br1').style.width='72%';$('br2').style.width='68%';$('br3').s
     };
     cards.appendChild(card);
   });
+  function selectRegionByIndex(idx){
+    const r=DATA.regions[idx];
+    if(!r) return;
+    const was=activeReg===r.key;
+    // toggle: click same region deselects
+    if(was){
+      activeReg='all';
+      document.querySelectorAll('#rf .btn').forEach(b=>b.classList.toggle('a',b.textContent==='All regions'));
+      document.querySelectorAll('.rg-card').forEach(c=>c.classList.remove('sel'));
+      updateKPIs('global',null); buildVolChart();
+    } else {
+      activeReg=r.key;
+      document.querySelectorAll('#rf .btn').forEach(b=>b.classList.toggle('a',b.textContent===r.name));
+      document.querySelectorAll('.rg-card').forEach(c=>c.classList.toggle('sel',c.dataset.key===r.key));
+      updateKPIs('region',r); buildVolChart();
+    }
+  }
+
   new Chart($('rg-chart'),{type:'bar',
     data:{labels:DATA.regions.map(r=>r.name),datasets:[
-      {label:'Volume (kt)',data:DATA.regions.map(r=>r.vol_kt),backgroundColor:DATA.regions.map(r=>r.color+'bb'),borderRadius:4,yAxisID:'yL'},
-      {label:'PCR % →',data:DATA.regions.map(r=>r.pcr),type:'line',borderColor:DATA.regions.map(r=>r.color),backgroundColor:'transparent',borderWidth:2.5,pointRadius:6,pointBackgroundColor:DATA.regions.map(r=>r.color),pointBorderColor:'#fff',pointBorderWidth:2,fill:false,tension:.3,yAxisID:'yR'},
+      {label:'Volume (kt)',data:DATA.regions.map(r=>r.vol_kt),backgroundColor:DATA.regions.map(r=>r.color+'bb'),hoverBackgroundColor:DATA.regions.map(r=>r.color),borderRadius:4,yAxisID:'yL'},
+      {label:'PCR % →',data:DATA.regions.map(r=>r.pcr),type:'line',borderColor:DATA.regions.map(r=>r.color),backgroundColor:'transparent',borderWidth:2.5,pointRadius:7,pointHoverRadius:10,pointBackgroundColor:DATA.regions.map(r=>r.color),pointBorderColor:'#fff',pointBorderWidth:2,fill:false,tension:.3,yAxisID:'yR'},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
-      scales:{yL:{position:'left',grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:10},callback:v=>(v/1000).toFixed(1)+'M'}},yR:{position:'right',min:10,max:25,grid:{display:false},ticks:{color:'#6b7f74',font:{size:10},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{color:'#1a2b22',font:{size:10}}}}}
+      cursor:'pointer',
+      onClick:(e,els)=>{
+        if(!els.length) return;
+        selectRegionByIndex(els[0].index);
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          mode:'index',intersect:false,
+          callbacks:{
+            footer:()=>'Click bar to filter dashboard →'
+          }
+        }
+      },
+      scales:{yL:{position:'left',grid:{color:'#e4ede8'},ticks:{color:'#6b7f74',font:{size:10},callback:v=>(v/1000).toFixed(1)+'M'}},yR:{position:'right',min:10,max:25,grid:{display:false},ticks:{color:'#6b7f74',font:{size:10},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{color:'#1a2b22',font:{size:10}}}}
+    }
   });
+  // make cursor pointer over chart
+  $('rg-chart').style.cursor='pointer';
 })();
 
 /* ═══ PANEL 4 SCORECARD ═══ */
